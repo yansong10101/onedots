@@ -90,17 +90,20 @@ def user_profile(request, pk):
     if request.method == 'POST':
         if user is not None:
             user.user_profile.gender = request.POST['gender']
-            user.user_profile.designer_type = request.POST['designer_type']
+            user.user_profile.first_name = user.first_name = request.POST['first_name']
+            user.user_profile.last_name = user.last_name = request.POST['last_name']
             user.user_profile.address1 = request.POST['address1']
             user.user_profile.address2 = request.POST['address2']
             user.user_profile.city = request.POST['city']
             user.user_profile.state = request.POST['state']
             user.user_profile.zip = request.POST['zip']
             user.user_profile.save()
+            user.save()
             return redirect(reverse('design:home'), get_display_dict('HOME'))
 
-    pass_dicts = {'designer_type': user.user_profile.designer_type,
-                  'gender': user.user_profile.gender,
+    pass_dicts = {'gender': user.user_profile.gender,
+                  'first_name': user.first_name,
+                  'last_name': user.last_name,
                   'address1': user.user_profile.address1,
                   'address2': user.user_profile.address2,
                   'city': user.user_profile.city,
@@ -133,8 +136,6 @@ def product_view(request, pk):
         pass_dicts['product_size'] = product_details.size.split(sep='|')
     if user.is_authenticated():
         pass_dicts['user_id'] = user.pk
-
-    rec_product_dict = get_recommended_products_by_product(product)
 
     return render(request,
                   'product.html',
@@ -246,15 +247,6 @@ def like_product(request, pk):
     product.number_like += 1
     product.save()
     return Response(data={'Success': 'Success'})
-
-
-# @ensure_csrf_cookie
-# @api_view(['GET', 'POST', ])
-# def get_product_review(request, pk):
-#     product = get_object_or_404(Product, pk=pk)
-#     reviews = CustomerReview.objects.filter(product=product)
-#     return Response(data={'review_list': reviews})
-#     return Response(data={'Success': 'Success'})
 
 
 def get_product_forum(request, pk):
@@ -576,4 +568,3 @@ def terms_and_conditions(request):
 
 def contact_us(request):
     return render(request, 'articles/contact.html', get_display_dict(title='CONTACT US'))
-
