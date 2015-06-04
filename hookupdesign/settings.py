@@ -143,7 +143,7 @@ REST_FRAMEWORK = {
     # 'PAGINATE_BY': 15,
 }
 
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.office365.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('SUPPORT_EMAIL', None)
 EMAIL_HOST_PASSWORD = os.environ.get('SUPPORT_EMAIL_PASSWORD', None)

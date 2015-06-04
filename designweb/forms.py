@@ -4,7 +4,9 @@ from designweb.models import UserProfile
 
 
 class UserProfileForm(forms.Form):
-    designer_type = forms.CharField(max_length=50, label='Designer Type', help_text='Please enter the type')
+    # designer_type = forms.CharField(max_length=50, label='Designer Type', help_text='Please enter the type')
+    first_name = forms.CharField(max_length=50, label='First Name')
+    last_name = forms.CharField(max_length=50, label='Last Name')
     gender = forms.ChoiceField(choices=UserProfile.GENDER_CHOICE, label='Gender')
     address1 = forms.CharField(max_length=50, label='Address 1')
     address2 = forms.CharField(max_length=50, label='Address 2')
@@ -31,3 +33,9 @@ class SignupForm(forms.Form):
         'class': 'full-width has-padding has-border', 'placeholder': 'Password', 'type': 'password'}))
     password2 = forms.CharField(max_length=25, label='', widget=forms.TextInput(attrs={
         'class': 'full-width has-padding has-border', 'placeholder': 'Confirm Password', 'type': 'password'}))
+
+
+class ChangePasswordForm(forms.Form):
+    old_password = forms.CharField(max_length=25, label='Old Password')
+    password = forms.CharField(max_length=25, label='New Password')
+    password2 = forms.CharField(max_length=25, label='Confirm Password')
