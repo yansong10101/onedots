@@ -334,11 +334,8 @@
                             <div>
                                     <input hidden name="payment_method" value="credit_card">
                                     <input hidden name="order_id" value="{{ order_id }}">
-
                             </div>
                         </fieldset>
-
-                        <input type="submit" name="submit">submit direct credit pay
                     </form>
 
                     <div class="col-sm-5">
@@ -527,30 +524,6 @@
 
         function request_failed(){
             $("#alert_msg").attr("class", "alert alert-warning").html("action failed, please login !").fadeIn(1000, 0).fadeOut(2000, 0);
-        }
-
-        function add_prod(id){
-            var field_id = "#prod_count_" + id;
-            var num = $(field_id).val();
-            if(isNaN(num) || num < 1){
-                num = 1;
-            }
-            else if(num >= 1){
-                num++;
-            }
-            $(field_id).val(num);
-        }
-
-        function sub_prod(id){
-            var field_id = "#prod_count_" + id;
-            var num = $(field_id).val();
-            if(isNaN(num) || num < 2){
-                num = 1;
-            }
-            else if(num >= 2){
-                num--;
-            }
-            $(field_id).val(num);
         }
 
         // api call -- for updating products in cart and order details

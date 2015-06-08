@@ -7,7 +7,7 @@
     <link href="{% static 'css/product_entry.css'%}" rel="stylesheet">
 
     <script type="text/javascript">var switchTo5x=true;</script>
-    <script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+{#    <script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>#}
     <script type="text/javascript">stLight.options({publisher: "1d0d7a7d-7be0-4769-ab66-f1a5620bb556", doNotHash: false, doNotCopy: false, hashAddressBar: true});</script>
     <script type="text/javascript" src="http://coolcarousels.frebsite.nl/js/jquery.js"></script>
     <script type="text/javascript" src="http://coolcarousels.frebsite.nl/js/jquery.carouFredSel.js"></script>
@@ -56,7 +56,12 @@
                         </a>
                     </div>
                 </div>
-                <span id="like">230000+</span><span id="heart" class="glyphicon glyphicon-heart"></span>
+                <span id="like">
+                    <button id="product_like" class="btn btn-default btn-primary">
+                        <span id="like_count" class="badge">{{ product.number_like }}</span> Like
+                        <i style="margin-left: 5px;" class="glyphicon glyphicon-heart"></i>
+                    </button>
+                </span><span id="heart"></span>
                 <div class="row clearboth">
                     <div class="col-md-9 col-md-push-3">
                         <div class="col-xs-11">
@@ -64,14 +69,14 @@
                         </div>
                     </div>
                 </div>
-          <!--<img id="mainImg" class="img-thumbnail" alt="Generic placeholder image">
-           <div id="social_block">
-                <span class='st_facebook_large' st_title="1 dots | {{ product.product_name }}" st_image="https://popdesign.s3.amazonaws.com/test/static/products/20150000004/main.jpg"></span>
-                <span class='st_twitter_large'></span>
-                <span class='st_googleplus_large'></span>
-                <span class='st_linkedin_large'></span>
-                <span class='st_pinterest_large'></span>
-            </div>-->
+{#          <!--<img id="mainImg" class="img-thumbnail" alt="Generic placeholder image">#}
+{#           <div id="social_block">#}
+{#                <span class='st_facebook_large' st_title="1 dots | {{ product.product_name }}" st_image="https://popdesign.s3.amazonaws.com/test/static/products/20150000004/main.jpg"></span>#}
+{#                <span class='st_twitter_large'></span>#}
+{#                <span class='st_googleplus_large'></span>#}
+{#                <span class='st_linkedin_large'></span>#}
+{#                <span class='st_pinterest_large'></span>#}
+{#            </div>-->#}
                 <div class="row">
                     <div class="col-md-9 col-md-push-3">
                         <div class="row" id="forum_row">
@@ -81,29 +86,13 @@
                             <div class="col-xs-1"></div>
                             <div class="col-xs-9">
                                 <textarea id="user-comment" placeholder="Share your thoughts of this product" rows="2"></textarea>
-                                <button id="comment_submit">submit</button>
+                                <button id="comment_submit" class="btn btn-default">submit</button>
                             </div>
 
                         </div>
                     </div>
                 </div>
             </div>
-
-
-            <!----row2 product info ---->
-{#            <div class="header">#}
-{#                <h4 class="title">Product Info</h4>#}
-{#            </div>#}
-{#            <div class="row-2 inner">#}
-{#                <h6 class="title">More Details</h6>#}
-{#                <p></p>#}
-{#                <h6 class="title">Care</h6>#}
-{#                <p></p>#}
-{#                <h6 class="title">Finish</h6>#}
-{#                <p></p>#}
-{#                <h6 class="title">Material</h6>#}
-{#                <p></p>#}
-{#            </div>#}
 
             <!---- row3 recommendation ---->
             <div class="header">
@@ -114,55 +103,6 @@
   	            <span class="prev arrow">&lt;</span>
                     <div class="content_carousel">
                         <ul id="rec_prod_list">
-
-{#                            <li>#}
-{#                                <a href="#">#}
-{#                        	        <img src="http://placehold.it/150x150">#}
-{#                                    <span>1</span>#}
-{#                                </a>#}
-{#                            </li>#}
-{#                            <li>#}
-{#                                <a href="#">#}
-{#                        	        <img src="http://placehold.it/150x150">#}
-{#                                    <span>2</span>#}
-{#                                </a>#}
-{#                            </li>#}
-{#                            <li>#}
-{#                                <a href="#">#}
-{#                        	        <img src="http://placehold.it/150x150">#}
-{#                                    <span>3</span>#}
-{#                                </a>#}
-{#                            </li>#}
-{#                            <li>#}
-{#                                <a href="#">#}
-{#                        	        <img src="http://placehold.it/150x150">#}
-{#                                    <span>4</span>#}
-{#                                </a>#}
-{#                            </li>#}
-{#                            <li>#}
-{#                                <a href="#">#}
-{#                        	        <img src="http://placehold.it/150x150">#}
-{#                                    <span>5</span>#}
-{#                                </a>#}
-{#                            </li>#}
-{#                            <li>#}
-{#                                <a href="#">#}
-{#                        	        <img src="http://placehold.it/150x150">#}
-{#                                    <span>6</span>#}
-{#                                </a>#}
-{#                            </li>#}
-{#                            <li>#}
-{#                                <a href="#">#}
-{#                        	        <img src="http://placehold.it/150x150">#}
-{#                                    <span>7</span>#}
-{#                                </a>#}
-{#                            </li>#}
-{#                            <li>#}
-{#                                <a href="#">#}
-{#                        	        <img src="http://placehold.it/150x150">#}
-{#                                    <span>8</span>#}
-{#                                </a>#}
-{#                            </li>#}
 
                         </ul>
                     </div>
@@ -234,8 +174,8 @@
                 </form>
                 <div class="hr" > </div>
 
-          <!--<button id="product_like" class="btn btn-default btn-primary"><span id="like_count" class="badge">{{ product.number_like }}</span> Like<i style="margin-left: 5px;" class="glyphicon glyphicon-thumbs-up"></i></button>
-          <br />-->
+{#          <button id="product_like" class="btn btn-default btn-primary"><span id="like_count" class="badge">{{ product.number_like }}</span> Like<i style="margin-left: 5px;" class="glyphicon glyphicon-thumbs-up"></i></button>#}
+          <br />
 
                 <button id="add_to_cart" class="btn btn-default btn-block"><i style="margin-right: 5px;" class="glyphicon glyphicon-shopping-cart"></i>Add to cart</button>
                 {% if show_create %}
@@ -486,8 +426,6 @@
             }).fail(function(jqXHR, textStatus){
                 alert("Failed !");
             });
-
-
         }
         // end section
     </script>

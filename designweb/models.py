@@ -213,6 +213,12 @@ class Order(models.Model):
             self.subtotal = payment_dict['subtotal']
             self.save()
 
+    def update_order_details_product_count(self, prod_id, num_items):
+        for order_detail in self.details.all():
+            if order_detail.product.pk == prod_id:
+                order_detail.number_items = num_items
+                order_detail.save()
+
 
 class OrderDetails(models.Model):
     order = models.ForeignKey(Order, related_name='details')

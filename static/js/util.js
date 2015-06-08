@@ -112,7 +112,8 @@ function changeQuantity($r, callback) {
         $plus = $r.find('.plus'),
         $minus = $r.find('.minus'),
         $count = $r.find('.product-count'),
-        $total = $r.find('.item_total_price');
+        $total = $r.find('.item_total_price'),
+        $product_quantity = $r.find('.product-quantity');
 
     function init() {
         setCount($count.val() * 1 || 0);
@@ -127,6 +128,7 @@ function changeQuantity($r, callback) {
     $plus.click(function() {
         var num = $count.val() * 1 || 0;
         setCount(num + 1);
+        $product_quantity.find('.product-count').attr('value', num + 1);
     });
 
     $minus.click(function() {
@@ -135,6 +137,7 @@ function changeQuantity($r, callback) {
             setCount(0);
         } else {
             setCount(num - 1);
+            $product_quantity.find('.product-count').attr('value', num - 1);
         }
     });
 
