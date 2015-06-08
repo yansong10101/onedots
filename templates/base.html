@@ -35,16 +35,16 @@
   <body>
 
     <!-- Google Tag Manager -->
-    <noscript>
-        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-TT9C32" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <script>
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-TT9C32');
-    </script>
+{#    <noscript>#}
+{#        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-TT9C32" height="0" width="0" style="display:none;visibility:hidden"></iframe>#}
+{#    </noscript>#}
+{#    <script>#}
+{#        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':#}
+{#        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],#}
+{#        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=#}
+{#        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);#}
+{#        })(window,document,'script','dataLayer','GTM-TT9C32');#}
+{#    </script>#}
     <!-- End Google Tag Manager -->
 
     <nav class="navbar  navbar-static-top navbar-inverse">
@@ -189,7 +189,7 @@
       <footer>
         <hr class="featurette-divider">
         <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2014 1 DOTS Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p>&copy; 2014 1DOTS Inc. &middot; <a href="{% url 'design:terms-and-conditions' %}">Privacy &middot; Terms</a></p>
       </footer>
 
     </div><!-- /.container -->
@@ -226,7 +226,7 @@
             });
 
             //close modal
-            $('.user-modal').on('click', function(event){
+            $form_modal.on('click', function(event){
                 if($(event.target).is($form_modal) || $(event.target).is('.close-form')){
                     $form_modal.removeClass('is-visible');
                 }

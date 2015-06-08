@@ -216,8 +216,8 @@ def update_cart_detail(request, pk, num, order_id=None):
     cart_detail.save()
     if order_id:
         order = get_object_or_404(Order, pk=order_id)
+        order.update_order_details_product_count(cart_detail.product.pk, num)
         cost_dict = order.get_total_payment()
-        cost_dict['Success'] = 'Success'
         return Response(data=cost_dict)
     return Response(data={})
 
@@ -382,8 +382,9 @@ class ProductsList(generics.ListAPIView):
     paginate_by = 15
 
     def get_queryset(self):
-        # products = Product.objects.all()
-        products = Product.objects.filter(is_active=True).order_by('-manually_set_prior_level', 'product_code')
+        products = Product.objects.filter(is_active=True).order_by('-manually_set_prior_level',
+                                                                   '-pk',
+                                                                   'product_code')
         grid_list = grid_view_shuffle(products)
         return grid_list
 
@@ -395,14 +396,14 @@ class ProductDetail(generics.RetrieveAPIView):
 
 class ProductCategory(generics.ListAPIView):
     serializer_class = ProductListSerializer
-    # paginate_by_param = 'page_size'
     paginate_by = 15
-    # max_paginate_by = 90
 
     def get_queryset(self):
         category_id = self.kwargs['category_id']
         category = get_object_or_404(Category, pk=category_id)
-        products = Product.objects.filter(category=category).order_by('-manually_set_prior_level', 'product_code')
+        products = Product.objects.filter(category=category).order_by('-manually_set_prior_level',
+                                                                      '-pk',
+                                                                      'product_code')
         return grid_view_shuffle(products)
 
 
