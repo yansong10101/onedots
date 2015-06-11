@@ -362,7 +362,7 @@
                     </div>
                     <div class="col-sm-1"></div>
                     <div class="col-sm-3">
-                        <a href="payment_success.html" data-toggle="tab" class="btn btn-block btn-info">Place order</a>
+                        <a href="" id="checkout_submit" data-toggle="tab" class="btn btn-block btn-info">Place order</a>
                     </div>
                 </div>
              </div>
@@ -570,7 +570,12 @@
             side_bar_shipping_fee.html(shipping_fee).val(shipping_fee);
             side_bar_subtotal.html(subtotal).val(subtotal);
         }
+    </script>
 
+    <script>
+        $('#checkout_submit').click(function(){
+            $('#direct_form').submit();
+        })
     </script>
 
 {% endblock %}

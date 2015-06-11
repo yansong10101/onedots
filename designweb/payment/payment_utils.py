@@ -49,7 +49,7 @@ def payment_process(payment_method, host_root, transaction_object, card_info={})
     else:
         print('payment cannot be approval, please check your payment info ...')
         return None
-    print("Direct credit -- Payment[%s] execute successfully" % (payment.id))
+    print("Direct credit -- Payment[%s] execute successfully" % payment.id)
     # for direct_credit return
     return payment_dict
 
@@ -58,7 +58,7 @@ def payment_execute(payment_id, payer_id, token):
     logging.basicConfig(level=logging.INFO)
     payment = Payment.find(payment_id)
     if payment.execute({"payer_id": payer_id}):  # return True or False
-        print("Paypal -- Payment[%s] execute successfully" % (payment.id))
+        print("Paypal -- Payment[%s] execute successfully" % payment.id)
         # for paypal payment return
         return {'payment_id': payment.id, 'payment_state': payment.state}
     else:
