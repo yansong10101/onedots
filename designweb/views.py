@@ -35,9 +35,6 @@ def index(request):
     product = get_object_or_404(Product, pk=10)
     print(get_recommended_products_by_product(product))
 
-    user = request.user
-    user.cart = Cart.objects.create(user=user)
-
     return render(request, 'index.html', {'title': 'HOME', })
 
 
