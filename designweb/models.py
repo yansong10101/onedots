@@ -21,6 +21,8 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=25, blank=True)
     state = models.CharField(max_length=2, blank=True)
     zip = models.CharField(max_length=8, blank=True)
+    phone1 = models.CharField(max_length=15, blank=True)
+    phone2 = models.CharField(max_length=15, blank=True)
 
     def raw_data(self):
         return {
@@ -144,7 +146,7 @@ class Order(models.Model):
     is_paid = models.BooleanField(default=False)
     payment_transaction_id = models.CharField(max_length=50, blank=True)
     payment_resource = models.CharField(max_length=50, blank=True)
-    payment_status = models.CharField(max_length=10, blank=True, default='NotPaid')     # cancel, Non, Done
+    payment_status = models.CharField(max_length=10, blank=True, default='NotPaid')     # Approval, Pending, Cancel...
     payment_method = models.CharField(max_length=15, blank=True)
     total_amount = models.DecimalField(decimal_places=2, blank=True, max_digits=7, null=True)
     total_tax = models.DecimalField(decimal_places=2, default=0.00, max_digits=7)
@@ -154,6 +156,8 @@ class Order(models.Model):
 
     receiver_first_name = models.CharField(max_length=25, default='')
     receiver_last_name = models.CharField(max_length=25, default='')
+    billing_first_name = models.CharField(max_length=25, default='')
+    billing_last_name = models.CharField(max_length=25, default='')
     shipping_address1 = models.CharField(max_length=50, blank=True)
     shipping_address2 = models.CharField(max_length=50, blank=True)
     shipping_city = models.CharField(max_length=20, blank=True)
@@ -252,7 +256,7 @@ class WishList(models.Model):
 class Cart(models.Model):
     user = models.OneToOneField(User, related_name='cart', primary_key=True)
     products = models.ManyToManyField(Product, related_name='carts', blank=True)
-    number_items = models.IntegerField(default=1)
+    number_items = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.username

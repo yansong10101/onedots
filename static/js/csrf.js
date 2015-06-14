@@ -1,9 +1,6 @@
 /**
  * Created by zys on 2/16/15.
  */
-/**
- * Created by leituo56 on 4/20/14.
- */
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {

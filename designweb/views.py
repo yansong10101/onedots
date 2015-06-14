@@ -8,12 +8,11 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from designweb.serializer import *
-from designweb.forms import *
 from designweb.utils import *
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 import json
 from designweb.caches.group_utils import *
-from designweb.payment.payment_utils import payment_process, DIRECT_CREDIT
+from designweb.payment.payment_utils import payment_process, DIRECT_CREDIT, PAYPAL
 
 
 def home(request):
@@ -34,8 +33,10 @@ def index(request):
 
     from designweb.utils import get_recommended_products_by_product
     product = get_object_or_404(Product, pk=10)
-
     print(get_recommended_products_by_product(product))
+
+    user = request.user
+    user.cart = Cart.objects.create(user=user)
 
     return render(request, 'index.html', {'title': 'HOME', })
 
@@ -97,6 +98,8 @@ def user_profile(request, pk):
             user.user_profile.city = request.POST['city']
             user.user_profile.state = request.POST['state']
             user.user_profile.zip = request.POST['zip']
+            user.user_profile.phone1 = request.POST['phone1']
+            user.user_profile.phone2 = request.POST['phone2']
             user.user_profile.save()
             user.save()
             return redirect(reverse('design:home'), get_display_dict('HOME'))
@@ -109,6 +112,8 @@ def user_profile(request, pk):
                   'city': user.user_profile.city,
                   'state': user.user_profile.state,
                   'zip': user.user_profile.zip,
+                  'phone1': user.user_profile.phone1,
+                  'phone2': user.user_profile.phone2,
                   'user_id': user.pk, }
     return render(request, 'user_profile.html', get_display_dict('USER PROFILE', pass_dict=pass_dicts))
 
@@ -365,6 +370,10 @@ def update_order_info(request, pk, order_id):
         'billing_zip': request.POST.get('billing_zip'),
         'billing_phone1': request.POST.get('billing_phone1'),
         'billing_phone2': request.POST.get('billing_phone2'),
+        'shipping_first_name': request.POST.get('shipping_first_name'),
+        'shipping_last_name': request.POST.get('shipping_last_name'),
+        'billing_first_name': request.POST.get('billing_first_name'),
+        'billing_last_name': request.POST.get('billing_last_name'),
     }
 
     msg = update_order_address_info(pk, order_id, shipping_data)
@@ -489,7 +498,10 @@ class GroupViewSet(viewsets.ModelViewSet):
 def payment_view(request):
     from designweb.payment.payment_utils import payment_execute
     payment_dict = payment_execute(request.GET['paymentId'], request.GET['PayerID'], request.GET['token'])
-    print(payment_dict)
+    user = request.user
+    cart = get_object_or_404(Cart, pk=user.pk)
+    order = user.orders.filter(is_paid=False, payment_status='NotPaid').order_by('-pk').first()
+    update_cart_and_order_payment_success(cart, order, payment_dict, PAYPAL)
     return redirect(reverse('design:payment-success'),
                     get_display_dict(title='Payment Success', pass_dict=payment_dict))
 
@@ -505,6 +517,7 @@ def payment_failed(request):
 def checkout(request):
     order_id = int(request.POST['order_id'])
     order = get_object_or_404(Order, pk=order_id)
+    cart = get_object_or_404(Cart, pk=request.user.pk)
     if request.method != 'POST' or not order_id:
         return redirect(reverse('design:payment-failed'), get_display_dict(title='Payment Failed'))
     payment_method = request.POST['payment_method']
@@ -525,16 +538,16 @@ def checkout(request):
     if payment_method == DIRECT_CREDIT:
         direct_credit_dict = {
             "credit_card": {
-                "type": "visa",
-                "number": str(request.POST['card_num_1']) +             # "4032035160291142"
+                "type": str(request.POST['payment_card_type']),  # "visa" "mastercard" "discover" "amex" "jcb" "maestro"
+                "number": str(request.POST['card_num_1']) +             # use this as sandbox visa : "4032035160291142"
                 str(request.POST['card_num_2']) +
                 str(request.POST['card_num_3']) +
                 str(request.POST['card_num_4']),
                 "expire_month": str(request.POST['cc_exp_mo']),
                 "expire_year": str(request.POST['cc_exp_yr']),
                 "cvv2": str(request.POST['cvv_number']),
-                "first_name": str(request.POST['card_holder']),     # need split later
-                "last_name": "Shopper",
+                "first_name": str(request.POST['card_holder_first']),
+                "last_name": str(request.POST['card_holder_last']),
                 "billing_address": {
                     "line1": order.billing_address1,
                     "city": order.billing_city,
@@ -546,13 +559,14 @@ def checkout(request):
         }
 
     payment_dict = payment_process(payment_method, request.META['HTTP_HOST'], transaction_dict, direct_credit_dict)
-    if not payment_dict:
+    if not payment_dict:    # the payment is failed if None
         return redirect(reverse('design:payment-failed'), get_display_dict(title='Payment Failed'))
     redirect_url = payment_dict['redirect_url']
     if redirect_url:    # payment method is paypal
         return HttpResponseRedirect(redirect_url)
     else:
         print(payment_dict)
+        update_cart_and_order_payment_success(cart, order, payment_dict, DIRECT_CREDIT)
         return redirect(reverse('design:payment-success'),
                         get_display_dict(title='Payment Success', pass_dict=payment_dict))
 # ===============================================

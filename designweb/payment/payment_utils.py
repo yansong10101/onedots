@@ -36,7 +36,9 @@ def payment_process(payment_method, host_root, transaction_object, card_info={})
     payment = Payment(get_payment_json(payment_method, host_root, transaction_object, card_info))
     is_approve = payment.create()
 
-    payment_dict = {'payment_id': payment.id, 'payment_state': payment.state, 'redirect_url': None}
+    payment_dict = {'payment_id': payment.id,
+                    'payment_state': payment.state,
+                    'redirect_url': None, }
 
     if is_approve:
         print("Payment[%s] created successfully" % payment.id)

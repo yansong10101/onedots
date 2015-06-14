@@ -73,7 +73,8 @@ if os.path.exists("/Users/zys"):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),              # enable this while first time setup for local
+            'NAME': os.path.join('/Users/zys/workspace', 'db.sqlite3'),  # hard code path for db outside project
         },
     }
 else:
