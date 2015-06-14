@@ -174,7 +174,7 @@ class Order(models.Model):
     billing_phone2 = models.CharField(max_length=15, blank=True)
 
     def __str__(self):
-        return self.pk
+        return self.user.username
 
     def get_total_payment(self):
         order_detail_list = self.details.all()
@@ -225,9 +225,9 @@ class Order(models.Model):
 
 
 class OrderDetails(models.Model):
-    order = models.ForeignKey(Order, related_name='details')
-    product = models.ForeignKey(Product, related_name='products')  # , unique=True
-    number_items = models.IntegerField(default=1, blank=True)
+    order = models.ForeignKey(Order, related_name='details', editable=False)
+    product = models.ForeignKey(Product, related_name='products', editable=False)  # , unique=True
+    number_items = models.IntegerField(default=1, blank=True, editable=False)
     subtotal = models.DecimalField(decimal_places=2, blank=True, max_digits=7, null=True)
     shipping_costs = models.DecimalField(decimal_places=2, blank=True, max_digits=7, null=True)
     tax = models.DecimalField(decimal_places=2, blank=True, max_digits=7, null=True)
@@ -240,8 +240,20 @@ class OrderDetails(models.Model):
     weight = models.CharField(max_length=20, blank=True, default='1.00')
     color = models.CharField(max_length=25, default='')
 
+    def get_order_id(self):
+        return self.order.pk
+    get_order_id.short_description = 'Order ID'
+
+    def is_order_paid(self):
+        return self.order.is_paid
+    is_order_paid.short_description = 'Payment Status'
+
+    def is_tracking_code_filled(self):
+        return bool(self.tracking_code)
+    is_tracking_code_filled.short_description = 'tracking Code Status'
+
     def __str__(self):
-        return str(self.order.pk)
+        return str(self.order.user.username)
 
 
 class WishList(models.Model):
@@ -274,6 +286,9 @@ class CartDetail(models.Model):
     size = models.CharField(max_length=50, default='')
     weight = models.CharField(max_length=20, blank=True, default='1.00')
     color = models.CharField(max_length=25, default='')
+
+    def __str__(self):
+        return self.cart.user.username
 
 
 class MicroGroup(models.Model):
@@ -321,3 +336,6 @@ class GroupDetails(models.Model):
     join_date = models.DateTimeField(auto_now_add=True, editable=False)
     email = models.CharField(max_length=70)
     is_sent = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.group
