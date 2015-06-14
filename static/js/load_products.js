@@ -39,28 +39,3 @@ $("#btn").on('click', function(){
 function clearAll(){
     container.empty()
 }
-
-
-
-
-//$(document).ready(function(){
-//
-//    $("#btn").on('click', function(){
-//        $.ajax({
-//        type: "GET",
-//        url: host + "/api/products/?format=json",
-//        dataType: "json"
-//        }).success(function(data, textStatus, jqXHR){
-//            $.each(data.results, function(i, item){
-//                var elem = $(".product_list").clone();
-//                elem.children('p').eq(0).html(item.product_name);
-//                elem.children('p').eq(1).html(item.product_code);
-//                $("#product_result").append(elem);
-//            });
-//        }).fail(function(jqXHR, textStatus){
-//            console.log(host);
-//            alert('Request Failed');
-//        });
-//    });
-//
-//});

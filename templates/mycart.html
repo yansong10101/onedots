@@ -160,11 +160,13 @@
             </div>
              <div class="col-md-9 col-sm-9 col-xs-9 outer-left">
                 <div class="header">
-                    <h4 class="title">Shipping Address</h4>
+                    <h4 class="title">Shipping Information</h4>
                 </div>
                 <div class="inner">
                     <form class="form-signin" id="ship_form" action="" method="">
                         {% csrf_token %}
+                        <label for="s_first_name">Receiver First Name:</label><input type="text" id="s_first_name" class="form-control" value="{{ profile.first_name }}">
+                        <label for="s_last_name">Receiver Last Name:</label><input type="text" id="s_last_name" class="form-control" value="{{ profile.last_name }}">
                         <label for="s_address1">Address 1:</label><input type="text" id="s_address1" name="address1" class="form-control" value="{{ profile.address1 }}">
                         <label for="s_address2">Address 2:</label><input type="text" id="s_address2" name="address2" class="form-control" value="{{ profile.address2 }}">
                         <label for="s_city">City:</label><input type="text" id="s_city" name="city" class="form-control" value="{{ profile.city }}">
@@ -172,15 +174,18 @@
                         <label for="s_zip">Zip:</label><input type="text" id="s_zip" name="zip" class="form-control" value="{{ profile.zip }}">
                         <label for="s_phone1">mobile phone:</label><input type="text" id="s_phone1" name="phone1" class="form-control" value="{{ profile.phone1 }}">
                         <label for="s_phone2">home phone:</label><input type="text" id="s_phone2" name="phone2" class="form-control" value="{{ profile.phone2 }}">
-                        <input type="checkbox" id="is_billing_address"/><label class="vCheckboxLabel" for="is_billing_address">Check if same as billing address</label>
+                        <br>
+                        <input type="checkbox" id="is_billing_address"/><label class="vCheckboxLabel" for="is_billing_address"> &nbsp; Check if same as billing address</label>
                     </form>
                 </div>
                  <div class="header">
-                     <h4 class="title">Billing Address</h4>
+                     <h4 class="title">Billing Information</h4>
                 </div>
                 <div class="inner">
                     <form class="form-signin" id="bill_form" action="" method="">
                         {% csrf_token %}
+                        <label for="b_first_name">Billing First Name:</label><input type="text" id="b_first_name" class="form-control">
+                        <label for="b_last_name">Billing Last Name:</label><input type="text" id="b_last_name" class="form-control">
                         <label for="b_address1">Address 1:</label><input type="text" id="b_address1" name="address1" class="form-control">
                         <label for="b_address2">Address 2:</label><input type="text" id="b_address2" name="address2" class="form-control">
                         <label for="b_city">City:</label><input type="text" id="b_city" name="city" class="form-control">
@@ -260,9 +265,12 @@
                         <fieldset class="inner" style="margin-right: 20px; padding-right:20px;border-right: 1px solid #999">
                             <legend>Credit/Debit Card</legend>
                             <div class="control-group">
-                                <label label-default="" class="control-label">Card Holder's Name</label>
+                                <label label-default="" class="control-label">Card Holder</label>
+                                <div class="controls" style="margin-bottom: 10px">
+                                    <input type="text" class="form-control" pattern="\w+ \w+.*" placeholder="first name" required="" name="card_holder_first">
+                                </div>
                                 <div class="controls">
-                                    <input type="text" class="form-control" pattern="\w+ \w+.*" title="First and last name" required="" name="card_holder">
+                                    <input type="text" class="form-control" pattern="\w+ \w+.*" placeholder="last name" required="" name="card_holder_last">
                                 </div>
                             </div>
                             <div class="control-group" style="margin-top: 10px">
@@ -331,6 +339,21 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="control-group" style="margin-top: 10px">
+                                <label label-default="" class="control-label">Card Type</label>
+                                <div class="controls inner" style="padding-top: 0px">
+                                    <div class="row">
+                                        <div class="col-xs-9" style="padding-right: 5px">
+                                            <select class="form-control" name="payment_card_type">
+                                                <option value="visa">Visa</option>
+                                                <option value="master">Master Card</option>
+                                                <option value="amex">America express</option>
+                                                <option value="discover">Discover</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div>
                                     <input hidden name="payment_method" value="credit_card">
                                     <input hidden name="order_id" value="{{ order_id }}">
@@ -342,14 +365,9 @@
                         <fieldset><legend>Paypal</legend></fieldset>
                         <form class="inner" action="/checkout/" method="post">
                             {% csrf_token %}
-{#                            <input type="hidden" name="cmd" value="_s-xclick">#}
-{#                            <input type="hidden" name="hosted_button_id" value="RS28UWF9LFWPL">#}
-                            <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-                            <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-
+                            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/x-click-but6.gif" name="submit" alt="PayPal - The safer, easier way to pay online!">
                             <input hidden name="payment_method" value="paypal">
                             <input hidden name="order_id" value="{{ order_id }}">
-
                         </form>
                     </div>
                 </div>
@@ -420,7 +438,9 @@
             b_state = $("#b_state"),
             b_zip = $("#b_zip"),
             b_phone1 = $('#b_phone1'),
-            b_phone2 = $('#b_phone2');
+            b_phone2 = $('#b_phone2'),
+            b_first_name = $('#b_first_name'),
+            b_last_name = $('#b_last_name');
 
         var s_address1 = $("#s_address1"),
             s_address2 = $("#s_address2"),
@@ -428,36 +448,41 @@
             s_state = $("#s_state"),
             s_zip = $("#s_zip"),
             s_phone1 = $('#s_phone1'),
-            s_phone2 = $('#s_phone2');
+            s_phone2 = $('#s_phone2'),
+            s_first_name = $('#s_first_name'),
+            s_last_name = $('#s_last_name');
 
         $('#is_billing_address').change(function(){
             if (this.checked) {
-                var add1 = $("#s_address1").val();
-                var add2 = $("#s_address2").val();
-                var city = $("#s_city").val();
-                var state = $("#s_state").val();
-                var zip = $("#s_zip").val();
 
-                if (add1 == "" || city == "" || state == "" || zip == "") {
+                if (s_address1 == "" || s_city == "" || s_state == "" || s_zip == "" || s_first_name == "" || s_last_name == "" || s_phone1 == "") {
                     alert("shipping address info required !");
                     this.checked = false;
                 }
                 else {
-                    $("#b_address1").val(add1);
-                    $("#b_address2").val(add2);
-                    $("#b_city").val(city);
-                    $("#b_state").val(state);
-                    $("#b_zip").val(zip);
-                    $("#bill_form input").prop('disabled', true);
+                    b_address1.val(s_address1.val()).prop('disabled', true);
+                    b_address2.val(s_address2.val()).prop('disabled', true);
+                    b_city.val(s_city.val()).prop('disabled', true);
+                    b_state.val(s_state.val()).prop('disabled', true);
+                    b_zip.val(s_zip.val()).prop('disabled', true);
+                    b_phone1.val(s_phone1.val()).prop('disabled', true);
+                    b_phone2.val(s_phone2.val()).prop('disabled', true);
+                    b_first_name.val(s_first_name.val()).prop('disabled', true);
+                    b_last_name.val(s_last_name.val()).prop('disabled', true);
+{#                    $("#ship_form input").prop('disabled', true);#}
                 }
             }
             else{
-                $("#b_address1").val("");
-                $("#b_address2").val("");
-                $("#b_city").val("");
-                $("#b_state").val("");
-                $("#b_zip").val("");
-                $("＃bill_form input").prop('disabled', false);
+                b_address1.val("").prop('disabled', false);
+                b_address2.val("").prop('disabled', false);
+                b_city.val("").prop('disabled', false);
+                b_state.val("").prop('disabled', false);
+                b_zip.val("").prop('disabled', false);
+                b_phone1.val("").prop('disabled', false);
+                b_phone2.val("").prop('disabled', false);
+                b_first_name.val("").prop('disabled', false);
+                b_last_name.val("").prop('disabled', false);
+{#                $("＃bill_form input").prop('disabled', false);#}
             }
         });
 
@@ -480,14 +505,17 @@
                      billing_state: b_state.val(),
                      billing_zip: b_zip.val(),
                      billing_phone1: b_phone1.val(),
-                     billing_phone2: b_phone2.val() },
+                     billing_phone2: b_phone2.val(),
+                     shipping_first_name: s_first_name.val(),
+                     shipping_last_name: s_last_name.val(),
+                     billing_first_name: b_first_name.val(),
+                     billing_last_name: b_last_name.val() },
             dataType: "json"
             }).success(function(data, textStatus, jqXHR){
                 //alert(data["result"]);
             }).fail(function(jqXHR, textStatus){
                 alert("Failed !");
             });
-
         });
     </script>
 
@@ -533,9 +561,9 @@
 
             $( ".cart_table td input" ).each(function( index ) {
 
-                if(index > 0){
-                    o_id = "";
-                }
+{#                if(index > 0){#}
+{#                    o_id = "";#}
+{#                }#}
                 var detail_id = parseInt($(this).attr('name')),
                     num_items = parseInt($(this).val());
 

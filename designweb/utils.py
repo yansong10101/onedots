@@ -119,6 +119,20 @@ def update_order_detail_by_cart(user, order):   # improve ++
     cart.save()
 
 
+def update_cart_and_order_payment_success(cart, order, payment_dict, payment_method):
+    # update order tb
+    order.payment_method = payment_method
+    order.payment_resource = payment_dict['payment_id']
+    order.is_paid = True
+    order.payment_status = payment_dict['payment_state']  # ????? after or approved automatically once payment send
+    order.save()
+    # update current cart and delete cart details
+    cart_details = cart.cart_details.all()
+    cart_details.delete()
+    cart.number_items = 0
+    cart.save()
+
+
 def order_view_process(user):
     order = user.orders.get_or_create(user=user, is_paid=False)[0]
     update_order_detail_by_cart(user, order)
@@ -133,6 +147,8 @@ def order_view_process(user):
 def update_order_address_info(user_id, order_id, data):
     user = get_object_or_404(User, pk=user_id)
     order = get_object_or_404(Order, pk=order_id)
+    order.receiver_first_name = data['shipping_first_name']
+    order.receiver_last_name = data['shipping_last_name']
     order.shipping_address1 = data['shipping_address1']
     order.shipping_address2 = data['shipping_address2']
     order.shipping_city = data['shipping_city']
@@ -147,6 +163,8 @@ def update_order_address_info(user_id, order_id, data):
     order.billing_zip = data['billing_zip']
     order.billing_phone1 = data['billing_phone1']
     order.billing_phone2 = data['billing_phone2']
+    order.billing_first_name = data['billing_first_name']
+    order.billing_last_name = data['billing_last_name']
     try:
         update_order_detail_by_cart(user, order)
         order.save()

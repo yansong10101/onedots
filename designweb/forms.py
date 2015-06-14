@@ -13,10 +13,12 @@ class UserProfileForm(forms.Form):
     city = forms.CharField(max_length=20, label='City')
     state = forms.CharField(max_length=2, label='State')
     zip = forms.CharField(max_length=9, label='Zip Code')
+    phone1 = forms.CharField(max_length=15, label='Cell Phone')
+    phone2 = forms.CharField(max_length=15, label='Work Phone')
 
     class Meta:
         model = UserProfile
-        fields = ('designer_type', 'gender', 'address1', 'address2', 'city', 'state', 'zip', )
+        fields = ('designer_type', 'gender', 'address1', 'address2', 'city', 'state', 'zip', 'phone1', 'phone2', )
 
 
 class LoginForm(forms.Form):
