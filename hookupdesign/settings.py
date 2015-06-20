@@ -108,6 +108,7 @@ AWS_QUERYSTRING_AUTH = False
 S3_STORAGE = 'https://%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 S3_URL = 'http://127.0.0.1:8000'   # initial with local for testing
 BUCKET_PATH = 'static/products/'
+TAX_FILE_PATH = 'static/tax_file/'
 IS_TEST = False
 
 # Static files (CSS, JavaScript, Images)

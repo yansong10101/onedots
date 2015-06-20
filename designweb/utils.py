@@ -9,6 +9,8 @@ import mimetypes
 import re
 import math
 from random import shuffle, choice
+from hookupdesign.settings import AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, BUCKET_PATH, \
+    TAX_FILE_PATH
 
 MAIN_IMAGE = 'main_image'
 SMALL_IMAGE = 's_alternate_*'
@@ -225,6 +227,11 @@ def sending_mail_for_new_signup(mail_to):
 
 
 # AWS S3 image buckets
+def get_aws_s3_bucket_connection():
+    conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+    return conn.get_bucket(AWS_STORAGE_BUCKET_NAME)
+
+
 def validate_and_separate_image_into_dict(image_list, product_dir):
     image_dict = {}
     big_list = []
@@ -246,10 +253,8 @@ def validate_and_separate_image_into_dict(image_list, product_dir):
 
 
 def get_s3_bucket_image_by_product(product_code):
-    from hookupdesign import settings
-    conn = S3Connection(settings.AWS_ACCESS_KEY, settings.AWS_SECRET_ACCESS_KEY)
-    bucket = conn.get_bucket(settings.AWS_STORAGE_BUCKET_NAME)
-    product_dir = settings.BUCKET_PATH + str(product_code) + '/'
+    bucket = get_aws_s3_bucket_connection()
+    product_dir = BUCKET_PATH + str(product_code) + '/'
     rs = bucket.list(prefix=product_dir)
     image_list = []
     for item in rs:
@@ -265,3 +270,20 @@ def get_s3_bucket_main_image_by_product(product_code):
         return ''
     else:
         return image_dict[MAIN_IMAGE]
+
+
+# AWS S3 file
+def get_current_ca_tax_file():
+    bucket = get_aws_s3_bucket_connection()
+    tax_file_path = TAX_FILE_PATH
+    tax_file_prefix = tax_file_path + 'ca_tax_' + str(date.today().year) + '.csv'
+    rs = bucket.list(prefix=tax_file_prefix)
+    from urllib import request
+    import csv
+    input_file = request.urlopen('https://s3.amazonaws.com/popdesign/static/tax_file/ca_tax_2015.csv')
+    with open(input_file, 'rU') as f:
+        reader = csv.reader(f, dialect=csv.excel_tab)
+        next(reader)
+        for row in reader:
+            row_list = str.split(row[0], ',')
+            print(row_list)

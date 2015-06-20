@@ -516,6 +516,7 @@
             }).fail(function(jqXHR, textStatus){
                 alert("Failed !");
             });
+
         });
     </script>
 
@@ -561,9 +562,6 @@
 
             $( ".cart_table td input" ).each(function( index ) {
 
-{#                if(index > 0){#}
-{#                    o_id = "";#}
-{#                }#}
                 var detail_id = parseInt($(this).attr('name')),
                     num_items = parseInt($(this).val());
 

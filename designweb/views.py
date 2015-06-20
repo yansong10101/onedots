@@ -20,20 +20,8 @@ def home(request):
 
 
 def index(request):
-    print(request.session)
-    # if request.method == 'POST':
-    #     form = LoginForm(request.POST)
-    #     if form.is_valid():
-    #         return render(request, 'home.html', {'title': form.cleaned_data['username']})
-    #     else:
-    #         print(form.cleaned_data['error'])
-    # else:
-    #     form = LoginForm()
-    # return render(request, 'index.html', {'title': 'HOME', 'form': form, })
-
-    from designweb.utils import get_recommended_products_by_product
-    product = get_object_or_404(Product, pk=10)
-    print(get_recommended_products_by_product(product))
+    from designweb.payment.tax_utils import get_tax_combine_rate_by_zip
+    print(get_tax_combine_rate_by_zip(96143))
 
     return render(request, 'index.html', {'title': 'HOME', })
 
