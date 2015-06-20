@@ -218,18 +218,18 @@
                             <td>Discount</td>
                             <td>$<span class="side_bar_discount_total">0.00</span></td>
                         </tr>
-                        <tr>
-                            <td>Tax</td>
-                            <td>$<span class="side_bar_tax_total">0.00</span></td>
-                        </tr>
-                        <tr>
-                            <td>Shipping</td>
-                            <td>$<span class="side_bar_shipping_total">0.00</span></td>
-                        </tr>
-                        <tr>
-                            <td><b>Subtotal</b></td>
-                            <td>$<span class="side_bar_subtotal">0.00</span></td>
-                        </tr>
+{#                        <tr>#}
+{#                            <td>Tax</td>#}
+{#                            <td>$<span class="side_bar_tax_total">0.00</span></td>#}
+{#                        </tr>#}
+{#                        <tr>#}
+{#                            <td>Shipping</td>#}
+{#                            <td>$<span class="side_bar_shipping_total">0.00</span></td>#}
+{#                        </tr>#}
+{#                        <tr>#}
+{#                            <td><b>Subtotal</b></td>#}
+{#                            <td>$<span class="side_bar_subtotal">0.00</span></td>#}
+{#                        </tr>#}
                     </table>
                 </div>
             </div>
@@ -314,7 +314,6 @@
                                         </div>
                                         <div class="col-xs-3">
                                             <select class="form-control" name="cc_exp_yr">
-                                                <option>2014</option>
                                                 <option>2015</option>
                                                 <option>2016</option>
                                                 <option>2017</option>
@@ -323,6 +322,9 @@
                                                 <option>2020</option>
                                                 <option>2021</option>
                                                 <option>2022</option>
+                                                <option>2023</option>
+                                                <option>2024</option>
+                                                <option>2025</option>
                                             </select>
                                         </div>
                                     </div>
@@ -513,6 +515,7 @@
             dataType: "json"
             }).success(function(data, textStatus, jqXHR){
                 //alert(data["result"]);
+                update_cart_to_order_details();
             }).fail(function(jqXHR, textStatus){
                 alert("Failed !");
             });
@@ -556,12 +559,12 @@
         }
 
         // api call -- for updating products in cart and order details
-        $(".cart_next").on('click', function(){
+        $(".cart_next").on('click', update_cart_to_order_details);
+
+        function update_cart_to_order_details(){
 
             var o_id = {{ order_id }};
-
             $( ".cart_table td input" ).each(function( index ) {
-
                 var detail_id = parseInt($(this).attr('name')),
                     num_items = parseInt($(this).val());
 
@@ -578,10 +581,10 @@
                         fill_amount(data);
 
                     }).fail(function(jqXHR, textStatus){
-                        alert('Request Failed');
+                        alert('update_cart_to_order_details -- Request Failed');
                     });
-                });
             });
+        }
 
         function fill_amount(data){
             var items_subtotal = data['items_subtotal'],

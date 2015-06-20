@@ -492,7 +492,37 @@ def payment_view(request):
 
 
 def payment_success(request):
-    return render(request, 'payment/payment_success.html', get_display_dict(title='Payment Success'))
+    user = request.user
+    order = user.orders.order_by('-pk').first()
+    # order = get_object_or_404(Order, user=user).order_by('-pk').first()
+    summery_dict = {
+        'order_id': order.pk,
+        'subtotal': order.subtotal,
+        'total_amount': order.total_amount,
+        'tax': order.tax,
+        'shipping_cost': order.total_shipping,
+        'discount': order.total_discount,
+        'shipping_info': {
+            'first_name': order.receiver_first_name,
+            'last_name': order.receiver_last_name,
+            'address_1': order.shipping_address1,
+            'address_2': order.shipping_address2,
+            'city': order.shipping_city,
+            'state': order.shipping_state,
+            'zip': order.shipping_zip,
+        },
+        'billing_info': {
+            'first_name': order.billing_first_name,
+            'last_name': order.billing_last_name,
+            'address_1': order.billing_address1,
+            'address_2': order.billing_address2,
+            'city': order.billing_city,
+            'state': order.billing_state,
+            'zip': order.billing_zip,
+        }
+    }
+    return render(request, 'payment/payment_success.html',
+                  get_display_dict(title='Payment Success', pass_dict=summery_dict))
 
 
 def payment_failed(request):

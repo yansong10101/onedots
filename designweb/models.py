@@ -193,14 +193,14 @@ class Order(models.Model):
                 'total': num_items,
             })
         shipping_fee = shipping_fee_multi_calc(shipping_cost_list)
-        tax = 0.00                                                  # add calc tax and discount later******************
+        tax = 0.00
         if self.billing_zip:
-            tax_rate = get_tax_combine_rate_by_zip(self.billing_zip)
+            tax_rate = float('{0:.2f}'.format(float(get_tax_combine_rate_by_zip(self.billing_zip))))
             tax = float('{0:.2f}'.format(tax_rate * items_subtotal))
         discount = 0.00
         # make currency amount
         items_subtotal = float('{0:.2f}'.format(items_subtotal))
-        tax = float('{0:.2f}'.format(tax))
+        # tax = float('{0:.2f}'.format(tax))
         discount = float('{0:.2f}'.format(discount))
         subtotal = float('{0:.2f}'.format(items_subtotal + shipping_fee + tax - discount))
         if subtotal < 0.00:
