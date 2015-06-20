@@ -168,8 +168,8 @@ def update_order_address_info(user_id, order_id, data):
     order.billing_first_name = data['billing_first_name']
     order.billing_last_name = data['billing_last_name']
     try:
-        update_order_detail_by_cart(user, order)
         order.save()
+        update_order_detail_by_cart(user, order)
     except:
         return 'error to save shipping info into database'
     return None
