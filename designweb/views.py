@@ -13,6 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 import json
 from designweb.caches.group_utils import *
 from designweb.payment.payment_utils import payment_process, DIRECT_CREDIT, PAYPAL
+from designweb.emailer.email_utils import Email, MAIL_TYPE_WELCOME, MAIL_TYPE_SUMMERY
 
 
 def home(request):
@@ -20,8 +21,12 @@ def home(request):
 
 
 def index(request):
-    from designweb.payment.tax_utils import get_tax_combine_rate_by_zip
-    print(get_tax_combine_rate_by_zip(96143))
+    # from designweb.payment.tax_utils import get_tax_combine_rate_by_zip
+    # print(get_tax_combine_rate_by_zip(96143))
+    signup_email = Email()
+    signup_email.set_mail_template({'Subject': 'Welcome to 1dots', 'To': 'yansong10101@gmail.com'})
+    signup_email.send_email('yansong10101@gmail.com')
+    signup_email.close_connection()
 
     return render(request, 'index.html', {'title': 'HOME', })
 
@@ -37,7 +42,14 @@ def signup(request):
             user.user_profile = UserProfile.objects.create(user=user)
             user.cart = Cart.objects.create(user=user)
             user.wish_list = WishList.objects.create(user=user)
-            # sending_mail_for_new_signup(username)
+
+            signup_email = Email()
+            signup_email.set_mail_template({'Subject': 'Welcome to 1dots',
+                                            'To': username,
+                                            'template_type': MAIL_TYPE_WELCOME, })
+            signup_email.send_email(username)
+            signup_email.close_connection()
+
             login(request, user)
             return render(request, 'home.html', get_display_dict(title='HOME',
                                                                  pass_dict={'welcome': True, 'user_id': user.pk}))
@@ -494,7 +506,6 @@ def payment_view(request):
 def payment_success(request):
     user = request.user
     order = user.orders.order_by('-pk').first()
-    # order = get_object_or_404(Order, user=user).order_by('-pk').first()
     summery_dict = {
         'order_id': order.pk,
         'subtotal': order.subtotal,
