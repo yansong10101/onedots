@@ -510,7 +510,7 @@ def payment_success(request):
         'order_id': order.pk,
         'subtotal': order.subtotal,
         'total_amount': order.total_amount,
-        'tax': order.tax,
+        'tax': order.total_tax,
         'shipping_cost': order.total_shipping,
         'discount': order.total_discount,
         'shipping_info': {
