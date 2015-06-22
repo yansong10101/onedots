@@ -192,7 +192,8 @@ class Order(models.Model):
                 'weight': prod_weight,
                 'total': num_items,
             })
-        shipping_fee = shipping_fee_multi_calc(shipping_cost_list)
+        # shipping_fee = shipping_fee_multi_calc(shipping_cost_list)
+        shipping_fee = 0.00
         tax = 0.00
         if self.billing_zip:
             tax_rate = float('{0:.2f}'.format(float(get_tax_combine_rate_by_zip(self.billing_zip))))
