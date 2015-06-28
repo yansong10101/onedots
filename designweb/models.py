@@ -223,10 +223,15 @@ class Order(models.Model):
             self.save()
 
     def update_order_details_product_count(self, prod_id, num_items):
+        print('update_order_details_product_count -- start -- parameters : ' + str(prod_id) + ', ' + str(num_items))
         for order_detail in self.details.all():
+            print('update_order_details_product_count -- for loop -- order_detail : ' + str(order_detail))
             if order_detail.product.pk == prod_id:
+                print('update_order_details_product_count -- if statement : ' +
+                      str(order_detail.product.pk) + '==' + str(prod_id))
                 order_detail.number_items = num_items
                 order_detail.save()
+                print('update_order_details_product_count -- end for loop **')
 
     @staticmethod
     def get_unconfirmed_orders():
