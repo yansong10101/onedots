@@ -13,7 +13,7 @@ from designweb.utils import *
 from django.http import HttpResponse, HttpResponseRedirect
 import json
 from designweb.caches.group_utils import update_caches_by_new_group
-from designweb.payment.payment_utils import payment_process, DIRECT_CREDIT, PAYPAL
+from designweb.payment.payment_utils import payment_process, DIRECT_CREDIT, PAYPAL, STRIPE_SECRET_KEY, STRIPE_PUBLIC_KEY
 from designweb.emailer.email_utils import Email, MAIL_TYPE_WELCOME, CONSTANT_DICT_FIELD_SUBJECT, \
     CONSTANT_DICT_FIELD_TO_LIST, CONSTANT_DICT_FIELD_TEMPLATE_TYPE, CONSTANT_DICT_FIELD_TEMPLATE_CONTENT
 import stripe
@@ -50,6 +50,8 @@ def index(request):
     from designweb.tests import write_tax_info_to_iron_cache, read_tax_from_iron_cache
     # write_tax_info_to_iron_cache()
     read_tax_from_iron_cache()
+    import os
+    print(os.environ.get('STRIPE_TEST_SECRET_KEY'))
 
     return render(request, 'index.html', {'title': 'HOME', })
 
@@ -625,9 +627,7 @@ def checkout_stripe(request):
     cart = get_object_or_404(Cart, pk=request.user.pk)
     if request.method != 'POST' or not order_id:
         return redirect(reverse('design:payment-failed'), get_display_dict(title='Payment Failed'))
-
-    stripe.api_key = 'sk_test_YPqz6cwmm9omemZIbKB7TM0C'
-
+    stripe.api_key = STRIPE_SECRET_KEY
     token = request.POST['stripeToken']
     try:
         charge = stripe.Charge.create(

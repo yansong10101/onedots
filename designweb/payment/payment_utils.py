@@ -1,10 +1,11 @@
 __author__ = 'zys'
 from paypalrestsdk import Payment, configure
-from hookupdesign.settings import PAYMENT_SANDBOX
+from hookupdesign.settings import PAYMENT_SANDBOX, STRIPE_SECRET_KEY, STRIPE_PUBLIC_KEY
 import logging
 
 DIRECT_CREDIT = 'credit_card'
 PAYPAL = 'paypal'
+STRIPE = 'stripe'
 
 
 def auth_payment():
