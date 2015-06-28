@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -166,9 +167,15 @@ PAYMENT_SANDBOX = {
 # Stripe api keys
 STRIPE_TEST_SECRET_KEY = os.environ.get('STRIPE_TEST_SECRET_KEY', None)
 STRIPE_TEST_PUBLIC_KEY = os.environ.get('STRIPE_TEST_PUBLIC_KEY', None)
-
 STRIPE_LIVE_SECRET_KEY = os.environ.get('STRIPE_LIVE_SECRET_KEY', None)
 STRIPE_LIVE_PUBLIC_KEY = os.environ.get('STRIPE_LIVE_PUBLIC_KEY', None)
+
+IS_LIVE_PAYMENT_API = False
+STRIPE_SECRET_KEY = STRIPE_TEST_SECRET_KEY
+STRIPE_PUBLIC_KEY = STRIPE_TEST_PUBLIC_KEY
+if IS_LIVE_PAYMENT_API:
+    STRIPE_SECRET_KEY = STRIPE_LIVE_SECRET_KEY
+    STRIPE_PUBLIC_KEY = STRIPE_LIVE_PUBLIC_KEY
 
 # MemCache setup
 os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS',
@@ -194,15 +201,7 @@ CACHES = {
             'dead_timeout': 10,
             '_poll_timeout': 2000
         }
-    },
-    # 'default': {
-    #     'BACKEND': 'django_bmemcached.memcached.BMemcached',
-    #     'LOCATION': os.environ.get('MEMCACHEDCLOUD_SERVERS').split(','),
-    #     'OPTIONS': {
-    #         'username': os.environ.get('MEMCACHEDCLOUD_USERNAME'),
-    #         'password': os.environ.get('MEMCACHEDCLOUD_PASSWORD')
-    #     }
-    # }
+    }
 }
 
 # iron rest api example :
