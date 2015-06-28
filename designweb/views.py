@@ -47,8 +47,9 @@ def index(request):
     #                             CONSTANT_DICT_FIELD_TEMPLATE_CONTENT: template_dict, })
     # signup_email.close_connection()
 
-    from django.core.cache import cache
-    print(cache.get('94555'))
+    from designweb.tests import write_tax_info_to_iron_cache, read_tax_from_iron_cache
+    # write_tax_info_to_iron_cache()
+    read_tax_from_iron_cache()
 
     return render(request, 'index.html', {'title': 'HOME', })
 
