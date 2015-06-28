@@ -23,7 +23,7 @@ def save_tax_to_cache(key, value):
 
 def get_tax_combine_rate_by_zip(key_zip):
     tax_dict = cache.get(key_zip)
-    return tax_dict[TAX_COLUMN_FIELD_COMBINE_RATE]
+    return tax_dict[TAX_COLUMN_FIELD_COMBINE_RATE] or 0.00
 
 
 def read_tax_csv_to_dict(input_file):
