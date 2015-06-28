@@ -18,13 +18,13 @@
                 <li data-target="#myCarousel" data-slide-to="2"></li>
             </ol>
             <div class="carousel-inner">
-                <a class="item active" id="slide_1">
+                <a class="item active" id="slide_3">
                     <img src="{{ storage_host }}/static/slides/rec_3.jpg" alt="Free Shipping">
                 </a>
-                <a class="item" id="slide_2">
+                <a class="item" id="slide_1">
                     <img src="{{ storage_host }}/static/slides/rec_1.jpg" alt="First slide">
                 </a>
-                <a class="item" id="slide_3">
+                <a class="item" id="slide_2">
                     <img src="{{ storage_host }}/static/slides/rec_2.jpg" alt="Second slide">
                 </a>
             </div>
@@ -95,7 +95,7 @@
 
     <script type="text/javascript">
         var host = window.location.origin;
-        var product_lite = $('<div class="product-thumbnail col-lg-4 col-md-4 col-sm-6"><div class="inner"><a><img class="img-thumbnail" alt="Generic placeholder image" style="width: 320px; height: 350px;" /></a><h5>Title</h5><h5>Price</h5></div></div>');
+        var product_lite = $('<div class="product-thumbnail col-lg-4 col-md-4 col-sm-6"><div class="inner"><a><img class="img-thumbnail" alt="Generic placeholder image" style="width: 320px; height: 350px;" /></a><h5>Title</h5><h5 style="color:black;">Price</h5></div></div>');
         var image_dir = "{{ storage_host }}" + "{% static 'products/' %}";
         var container = $(".product-grid");
         var load_btn = $("#btn");
@@ -211,8 +211,8 @@
 
     <script>
         function hard_code_slide_links(){
-            $('#slide_2').attr('href', host + "/product/" + 42);
-            $('#slide_3').attr('href', host + "/product/" + 37);
+            $('#slide_1').attr('href', host + "/product/" + 42);
+            $('#slide_2').attr('href', host + "/product/" + 37);
         }
     </script>
 

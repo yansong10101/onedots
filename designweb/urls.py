@@ -1,3 +1,4 @@
+__author__ = 'zys'
 from django.conf.urls import url, patterns, include
 from designweb import views
 from rest_framework import routers
@@ -11,7 +12,8 @@ urlpatterns = patterns(
     url(r'^signup/', views.signup, name='signup'),
     url(r'^user-profile/(?P<pk>[0-9]+)/$', views.user_profile, name='user-profile'),
     url(r'^product/(?P<pk>[0-9]+)/$', views.product_view, name='product-view'),
-    url(r'^cart/', views.my_cart, name='my-cart'),
+    # url(r'^cart/', views.my_cart, name='my-cart'),
+    url(r'^cart-and-purchase/', views.my_cart, name='cart-and-purchase'),
     url(r'^wish/(?P<pk>[0-9]+)/', views.my_wish, name='my-wish'),
     # url(r'^order/(?P<pk>[0-9]+)/', views.my_order, name='my-order'),
     url(r'^category/(?P<pk>[0-9]+)/', views.category_view, name='category-view'),
@@ -19,6 +21,7 @@ urlpatterns = patterns(
     url(r'^microgroup/(?P<product_id>[0-9]+)/(?P<group_id>[0-9]+)/$', views.micro_group_view, name='micro-group-id'),
     url(r'^microgroup/(?P<product_id>[0-9]+)//$', views.micro_group_view, name='micro-group'),
     url(r'^checkout/$', views.checkout, name='checkout'),
+    url(r'^direct-checkout/$', views.checkout_stripe, name='direct-checkout'),
 
     # api for ajax add and delete
     url(r'^api/cart/(?P<pk>[0-9]+)/add/(?P<prod_quantity>[0-9]+)/$', views.add_cart, name='add-to-cart'),

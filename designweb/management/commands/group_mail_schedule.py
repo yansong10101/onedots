@@ -4,7 +4,7 @@ from designweb.utils import sending_mail_for_new_signup
 
 
 def testing_call():
-        print("crontab is working good !")
+    print("crontab is working good !")
 
 
 class Command(BaseCommand):

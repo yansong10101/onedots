@@ -1,6 +1,7 @@
+__author__ = 'zys'
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-from django.contrib.auth import *
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.forms import UserCreationForm
@@ -11,9 +12,11 @@ from designweb.serializer import *
 from designweb.utils import *
 from django.http import HttpResponse, HttpResponseRedirect
 import json
-from designweb.caches.group_utils import *
+from designweb.caches.group_utils import update_caches_by_new_group
 from designweb.payment.payment_utils import payment_process, DIRECT_CREDIT, PAYPAL
-from designweb.emailer.email_utils import Email, MAIL_TYPE_WELCOME, MAIL_TYPE_SUMMERY
+from designweb.emailer.email_utils import Email, MAIL_TYPE_WELCOME, CONSTANT_DICT_FIELD_SUBJECT, \
+    CONSTANT_DICT_FIELD_TO_LIST, CONSTANT_DICT_FIELD_TEMPLATE_TYPE, CONSTANT_DICT_FIELD_TEMPLATE_CONTENT
+import stripe
 
 
 def home(request):
@@ -23,10 +26,26 @@ def home(request):
 def index(request):
     # from designweb.payment.tax_utils import get_tax_combine_rate_by_zip
     # print(get_tax_combine_rate_by_zip(96143))
-    signup_email = Email()
-    signup_email.set_mail_template({'Subject': 'Welcome to 1dots', 'To': 'yansong10101@gmail.com'})
-    signup_email.send_email('yansong10101@gmail.com')
-    signup_email.close_connection()
+
+    # from designweb.emailer import MAIL_TYPE_STAFF_ALERT
+    # signup_email = Email()
+    # order_list = Order.get_unconfirmed_orders()
+    # email_list = ['yansongzhang10101@gmail.com', 'tianyang007@163.com', ]
+    # for order in order_list:
+    #     template_dict = {
+    #         'username': order.user.username,
+    #         'user_id': order.user.pk,
+    #         'order_id': order.pk,
+    #         'subtotal': order.subtotal,
+    #         'payment_resource': order.payment_resource,
+    #         'payment_transaction_id': order.payment_transaction_id,
+    #         'modified_date': order.modified_date,
+    #     }
+    #     signup_email.send_email({CONSTANT_DICT_FIELD_SUBJECT: '1dots : Staff Alert email',
+    #                             CONSTANT_DICT_FIELD_TO_LIST: email_list,
+    #                             CONSTANT_DICT_FIELD_TEMPLATE_TYPE: MAIL_TYPE_STAFF_ALERT,
+    #                             CONSTANT_DICT_FIELD_TEMPLATE_CONTENT: template_dict, })
+    # signup_email.close_connection()
 
     return render(request, 'index.html', {'title': 'HOME', })
 
@@ -42,14 +61,12 @@ def signup(request):
             user.user_profile = UserProfile.objects.create(user=user)
             user.cart = Cart.objects.create(user=user)
             user.wish_list = WishList.objects.create(user=user)
-
             signup_email = Email()
-            signup_email.set_mail_template({'Subject': 'Welcome to 1dots',
-                                            'To': username,
-                                            'template_type': MAIL_TYPE_WELCOME, })
-            signup_email.send_email(username)
+            signup_email.send_email({CONSTANT_DICT_FIELD_SUBJECT: 'Welcome to 1dots',
+                                     CONSTANT_DICT_FIELD_TO_LIST: [username, ],
+                                     CONSTANT_DICT_FIELD_TEMPLATE_TYPE: MAIL_TYPE_WELCOME,
+                                     CONSTANT_DICT_FIELD_TEMPLATE_CONTENT: None, })
             signup_email.close_connection()
-
             login(request, user)
             return render(request, 'home.html', get_display_dict(title='HOME',
                                                                  pass_dict={'welcome': True, 'user_id': user.pk}))
@@ -281,7 +298,8 @@ def my_cart(request):
         order_dicts = order_view_process(user)
         pass_dicts = {'products': products, 'orders': user.cart.cart_details.all()}
         combine_dicts = dict(list(order_dicts.items()) + list(pass_dicts.items()))
-        return render(request, 'mycart.html', get_display_dict('MY CART', pass_dict=combine_dicts))
+        # return render(request, 'mycart.html', get_display_dict('MY CART', pass_dict=combine_dicts))
+        return render(request, 'cart-and-purchase.html', get_display_dict('CART AND PURCHASE', pass_dict=combine_dicts))
 
 
 @ensure_csrf_cookie
@@ -595,6 +613,35 @@ def checkout(request):
         update_cart_and_order_payment_success(cart, order, payment_dict, DIRECT_CREDIT)
         return redirect(reverse('design:payment-success'),
                         get_display_dict(title='Payment Success', pass_dict=payment_dict))
+
+
+def checkout_stripe(request):
+    order_id = int(request.POST['order_id'])
+    order = get_object_or_404(Order, pk=order_id)
+    cart = get_object_or_404(Cart, pk=request.user.pk)
+    if request.method != 'POST' or not order_id:
+        return redirect(reverse('design:payment-failed'), get_display_dict(title='Payment Failed'))
+
+    stripe.api_key = 'sk_test_YPqz6cwmm9omemZIbKB7TM0C'
+
+    token = request.POST['stripeToken']
+    try:
+        charge = stripe.Charge.create(
+            source=token,
+            amount=int(order.subtotal * 100),
+            currency='usd',
+        )
+        if charge.status == 'succeeded':
+            payment_dict = {
+                'payment_id': charge['id'],
+                'payment_state': charge['status'],
+            }
+            update_cart_and_order_payment_success(cart, order, payment_dict, DIRECT_CREDIT)
+    except stripe.error.CardError as e:
+        print(e)
+        return redirect(reverse('design:payment-failed'), get_display_dict(title='Payment Failed'))
+    return redirect(reverse('design:payment-success'), get_display_dict(title='Payment Success'))
+
 # ===============================================
 
 
