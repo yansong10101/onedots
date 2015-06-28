@@ -239,10 +239,6 @@ def update_cart_detail(request, pk, num, order_id=None):
     if order_id:
         order = get_object_or_404(Order, pk=order_id)
         order.update_order_details_product_count(cart_detail.product.pk, num)
-        # for order_detail in order.details.all():
-        #     if order_detail.product.pk == cart_detail.product.pk:
-        #         order_detail.number_items = num
-        #         order_detail.save()
         cost_dict = order.get_total_payment()
         return Response(data=cost_dict)
     return Response(data={})
