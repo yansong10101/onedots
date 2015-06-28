@@ -176,6 +176,11 @@ os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS',
 os.environ['MEMCACHE_USERNAME'] = os.environ.get('MEMCACHIER_USERNAME', '4cdff9')
 os.environ['MEMCACHE_PASSWORD'] = os.environ.get('MEMCACHIER_PASSWORD', '696829c4d1')
 
+os.environ['MEMCACHEDCLOUD_SERVERS'] = \
+    os.environ.get('MEMCACHEDCLOUD_SERVERS', 'pub-memcache-19289.us-east-1-3.2.ec2.garantiadata.com:19289')
+os.environ['MEMCACHEDCLOUD_USERNAME'] = os.environ.get('MEMCACHEDCLOUD_USERNAME', 'memcached-app34566323')
+os.environ['MEMCACHEDCLOUD_PASSWORD'] = os.environ.get('MEMCACHEDCLOUD_PASSWORD', '1QdqbR2fATLAYTaj')
+
 CACHES = {
     'default': {
         'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
@@ -189,5 +194,19 @@ CACHES = {
             'dead_timeout': 10,
             '_poll_timeout': 2000
         }
-    }
+    },
+    # 'default': {
+    #     'BACKEND': 'django_bmemcached.memcached.BMemcached',
+    #     'LOCATION': os.environ.get('MEMCACHEDCLOUD_SERVERS').split(','),
+    #     'OPTIONS': {
+    #         'username': os.environ.get('MEMCACHEDCLOUD_USERNAME'),
+    #         'password': os.environ.get('MEMCACHEDCLOUD_PASSWORD')
+    #     }
+    # }
 }
+
+# iron rest api example :
+# https://cache-aws-us-east-1.iron.io/1/projects/IRON_CACHE_PROJECT_ID/caches/IRON_CACHE_TAX_BUCKET?oauth=IRON_CACHE_TOKEN
+IRON_CACHE_TAX_BUCKET = 'tax_cache'
+IRON_CACHE_PROJECT_ID = os.environ.get('IRON_CACHE_PROJECT_ID', '559032b5a2ff61000a00004d')
+IRON_CACHE_TOKEN = os.environ.get('IRON_CACHE_TOKEN', 'BbRtzwwVBmAvWaI2yp14uVcRq-M')

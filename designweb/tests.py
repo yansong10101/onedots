@@ -2,8 +2,9 @@
 # from designweb import models
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
-from hookupdesign.settings import EMAIL_HOST_USER
+from hookupdesign.settings import EMAIL_HOST_USER, IRON_CACHE_PROJECT_ID, IRON_CACHE_TAX_BUCKET, IRON_CACHE_TOKEN
 from designweb.payment.payment_utils import *
+from designweb.payment.tax_utils import *
 
 
 # Create your tests here.
@@ -125,3 +126,54 @@ def test_payment(payment_method, host_root, transaction_object, card_info={}):
     print("Direct credit -- Payment[%s] execute successfully" % (payment.id))
     # for direct_credit return
     return payment_dict
+
+
+def test_memcache_cloud():
+    from iron_cache import IronCache
+
+    # Create an client object
+    tax_cache = IronCache(project_id=IRON_CACHE_PROJECT_ID, token=IRON_CACHE_TOKEN)
+
+    # Put an item
+    tax_cache.put(cache="test_cache", key="mykey", value="Hello IronCache!")
+
+    # Get an item
+    item = tax_cache.get(cache="test_cache", key="mykey")
+    print(item.value)
+
+    # Delete an item
+    tax_cache.delete(cache="test_cache", key="mykey")
+
+    # Increment an item in the cache
+    tax_cache.increment(cache="test_cache", key="mykey", amount=10)
+
+
+def write_tax_info_to_iron_cache():
+    from iron_cache import IronCache
+    tax_cache = IronCache(project_id=IRON_CACHE_PROJECT_ID, token=IRON_CACHE_TOKEN)
+    with open(TAX_FILE_PATH, 'rU') as f:
+        reader = csv.reader(f, dialect=csv.excel_tab)
+        next(reader)
+        for row in reader:
+            row_list = str.split(row[0], ',')
+            key_zip_code = row_list[1]
+            values = {
+                TAX_COLUMN_FIELD_STATE: row_list[0],
+                TAX_COLUMN_FIELD_ZIP: row_list[1],
+                TAX_COLUMN_FIELD_REGION_NAME: row_list[2],
+                TAX_COLUMN_FIELD_REGION_CODE: row_list[3],
+                TAX_COLUMN_FIELD_COMBINE_RATE: row_list[4],
+                TAX_COLUMN_FIELD_STATE_RATE: row_list[5],
+                TAX_COLUMN_FIELD_COUNTY_RATE: row_list[6],
+                TAX_COLUMN_FIELD_CITY_RATE: row_list[7],
+                TAX_COLUMN_FIELD_SPECIAL_RATE: row_list[8],
+            }
+            tax_cache.put(cache=IRON_CACHE_TAX_BUCKET, key=key_zip_code, value=values)
+            sleep(0.0005)
+            print(key_zip_code)
+
+
+def read_tax_from_iron_cache():
+    from iron_cache import IronCache
+    tax_cache = IronCache(project_id=IRON_CACHE_PROJECT_ID, token=IRON_CACHE_TOKEN)
+    print(tax_cache.get(str(96151), cache=IRON_CACHE_TAX_BUCKET))

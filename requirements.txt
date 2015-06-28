@@ -25,3 +25,5 @@ pylibmc==1.4.1
 django-bmemcached==0.2.2
 django-pylibmc==0.6.0
 stripe==1.22.3
+iron-cache==0.3.2
+iron-core==1.1.6

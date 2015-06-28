@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import date, datetime, timedelta, time
 from designweb.shipping.shipping_utils import shipping_fee_multi_calc
-from designweb.payment.tax_utils import get_tax_combine_rate_by_zip
+from designweb.payment.tax_utils import get_tax_combine_rate_by_zip, get_tax_combine_rate_by_zip_from_iron_cache
 
 
 # User profile
@@ -197,8 +197,10 @@ class Order(models.Model):
         shipping_fee = 0.00
         tax = 0.00
         if self.billing_zip:
+            # mem cache -- bugs for their server : will disconnect by second time call
             # tax_rate = float('{0:.2f}'.format(float(get_tax_combine_rate_by_zip(self.billing_zip))))
-            tax_rate = 0.009
+            # change to iron cache
+            tax_rate = float('{0:.2f}'.format(float(get_tax_combine_rate_by_zip_from_iron_cache(self.billing_zip))))
             tax = float('{0:.2f}'.format(tax_rate * items_subtotal))
         discount = 0.00
         # make currency amount

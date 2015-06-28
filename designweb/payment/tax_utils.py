@@ -2,6 +2,7 @@ __author__ = 'zys'
 import csv
 from django.core.cache import cache
 from time import sleep
+from designweb.payment import *
 
 
 TAX_FILE_PATH = '/Users/zys/Downloads/ca_tax_2015.csv'
@@ -44,5 +45,14 @@ def read_tax_csv_to_dict(input_file):
                 TAX_COLUMN_FIELD_CITY_RATE: row_list[7],
                 TAX_COLUMN_FIELD_SPECIAL_RATE: row_list[8],
             }
-            # save_tax_to_cache(key_zip_code, values)
-            # print(get_tax_combine_rate_by_zip(key_zip_code))
+            save_tax_to_cache(key_zip_code, values)
+            print(get_tax_combine_rate_by_zip(key_zip_code))
+
+
+def get_tax_combine_rate_by_zip_from_iron_cache(key_zip):
+    tax_cache = IronCache(project_id=IRON_CACHE_PROJECT_ID, token=IRON_CACHE_TOKEN)
+    item = tax_cache.get(str(key_zip), cache=IRON_CACHE_TAX_BUCKET)
+    tax_dict = json.loads(item.value)
+    if not tax_dict:
+        return 0.09
+    return tax_dict[TAX_COLUMN_FIELD_COMBINE_RATE]
