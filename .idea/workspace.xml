@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45f6cc4d-ba8e-48b8-8249-8d9310bcf5f8" name="Default" comment="02/18/2015 -- add new function module, fix utils functions, fix model class data fields">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/designweb/models.py" afterPath="$PROJECT_DIR$/designweb/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/designweb/views.py" afterPath="$PROJECT_DIR$/designweb/views.py" />
     </list>
     <list id="dcc6eb57-40db-497d-a98b-00e0f11838a2" name="testing picture" comment="" />
@@ -43,6 +43,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="base.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/base.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.50239235">
+              <caret line="46" column="13" selection-start-line="46" selection-start-column="13" selection-end-line="46" selection-end-column="13" />
+              <folding>
+                <marker date="1435484117000" expanded="true" signature="1496:1510" placeholder="    &lt;noscrip... %}" />
+                <marker date="1435484117000" expanded="true" signature="1511:1651" placeholder="        &lt;iframe src=&quot;//www.googletagmanager.com/ns.html?id=GTM-TT9C32&quot; height=&quot;0&quot; width=&quot;0&quot; style=&quot;display:none;... %}" />
+                <marker date="1435484117000" expanded="true" signature="1652:1667" placeholder="    &lt;/noscrip... %}" />
+                <marker date="1435484117000" expanded="true" signature="1668:1680" placeholder="    &lt;scrip... %}" />
+                <marker date="1435484117000" expanded="true" signature="1681:1747" placeholder="        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start... %}" />
+                <marker date="1435484117000" expanded="true" signature="1748:1829" placeholder="        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0... %}" />
+                <marker date="1435484117000" expanded="true" signature="1830:1907" placeholder="        j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.sr... %}" />
+                <marker date="1435484117000" expanded="true" signature="1908:1992" placeholder="        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f... %}" />
+                <marker date="1435484117000" expanded="true" signature="1993:2055" placeholder="        })(window,document,'script','dataLayer','GTM-TT9C32'... %}" />
+                <marker date="1435484117000" expanded="true" signature="2056:2069" placeholder="    &lt;/scrip... %}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="cart-and-purchase.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/cart-and-purchase.html">
           <provider selected="true" editor-type-id="text-editor">
@@ -57,7 +78,7 @@
         <entry file="file://$PROJECT_DIR$/designweb/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="243" column="35" selection-start-line="243" selection-start-column="35" selection-end-line="243" selection-end-column="35" />
+              <caret line="240" column="77" selection-start-line="240" selection-start-column="77" selection-end-line="240" selection-end-column="77" />
               <folding>
                 <element signature="e#19#64#0" expanded="true" />
               </folding>
@@ -109,11 +130,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/designweb/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.40245774">
-              <caret line="200" column="28" selection-start-line="200" selection-start-column="28" selection-end-line="200" selection-end-column="28" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="198" column="28" selection-start-line="198" selection-start-column="28" selection-end-line="198" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -194,7 +215,6 @@
         <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/templates/mycart.html" />
         <option value="$PROJECT_DIR$/designweb/utils.py" />
-        <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/designweb/urls.py" />
         <option value="$PROJECT_DIR$/hookupdesign/settings.py" />
         <option value="$PROJECT_DIR$/hookupdesign/s3utils.py" />
@@ -206,8 +226,9 @@
         <option value="$PROJECT_DIR$/templates/home.html" />
         <option value="$PROJECT_DIR$/designweb/payment/tax_utils.py" />
         <option value="$PROJECT_DIR$/templates/cart-and-purchase.html" />
-        <option value="$PROJECT_DIR$/designweb/views.py" />
         <option value="$PROJECT_DIR$/designweb/models.py" />
+        <option value="$PROJECT_DIR$/designweb/views.py" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
       </list>
     </option>
   </component>
@@ -1159,14 +1180,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.875">
-          <caret line="26" column="16" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/designweb/shipping/shipping_utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.44510385">
@@ -1358,14 +1371,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/cart-and-purchase.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.25">
-          <caret line="492" column="0" selection-start-line="492" selection-start-column="0" selection-end-line="492" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/designweb/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1392,21 +1397,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/designweb/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="198" column="28" selection-start-line="198" selection-start-column="28" selection-end-line="198" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/cart-and-purchase.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.25">
+          <caret line="492" column="0" selection-start-line="492" selection-start-column="0" selection-end-line="492" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/designweb/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="243" column="35" selection-start-line="243" selection-start-column="35" selection-end-line="243" selection-end-column="35" />
+          <caret line="240" column="77" selection-start-line="240" selection-start-column="77" selection-end-line="240" selection-end-column="77" />
           <folding>
             <element signature="e#19#64#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/designweb/models.py">
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.40245774">
-          <caret line="200" column="28" selection-start-line="200" selection-start-column="28" selection-end-line="200" selection-end-column="28" />
-          <folding />
+        <state vertical-scroll-proportion="0.50239235">
+          <caret line="46" column="13" selection-start-line="46" selection-start-column="13" selection-end-line="46" selection-end-column="13" />
+          <folding>
+            <marker date="1435484117000" expanded="true" signature="1496:1510" placeholder="    &lt;noscrip... %}" />
+            <marker date="1435484117000" expanded="true" signature="1511:1651" placeholder="        &lt;iframe src=&quot;//www.googletagmanager.com/ns.html?id=GTM-TT9C32&quot; height=&quot;0&quot; width=&quot;0&quot; style=&quot;display:none;... %}" />
+            <marker date="1435484117000" expanded="true" signature="1652:1667" placeholder="    &lt;/noscrip... %}" />
+            <marker date="1435484117000" expanded="true" signature="1668:1680" placeholder="    &lt;scrip... %}" />
+            <marker date="1435484117000" expanded="true" signature="1681:1747" placeholder="        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start... %}" />
+            <marker date="1435484117000" expanded="true" signature="1748:1829" placeholder="        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0... %}" />
+            <marker date="1435484117000" expanded="true" signature="1830:1907" placeholder="        j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.sr... %}" />
+            <marker date="1435484117000" expanded="true" signature="1908:1992" placeholder="        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f... %}" />
+            <marker date="1435484117000" expanded="true" signature="1993:2055" placeholder="        })(window,document,'script','dataLayer','GTM-TT9C32'... %}" />
+            <marker date="1435484117000" expanded="true" signature="2056:2069" placeholder="    &lt;/scrip... %}" />
+          </folding>
         </state>
       </provider>
     </entry>
