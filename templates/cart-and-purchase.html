@@ -1,0 +1,552 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
+    <link href="{% static 'css/cart_style.css'%}" rel="stylesheet">
+    <link href="{% static 'css/product_entry.css'%}" rel="stylesheet">
+
+
+    <div id="alert_msg" class="" style="display:none;"></div>
+
+    <div id="tabs" class="tab-content">
+
+        <div class="row tab-pane active" style="margin-top: 20px" id="summary">
+            <div class="row top-bar">
+                <ul class="myTab">
+                    <li class="active col-md-4 col-sm-4 col-xs-4">
+                        1. Shopping Cart
+                    </li>
+
+                    <li class="col-md-4 col-sm-4 col-xs-4">
+                        2. Address
+                    </li>
+
+                    <li class="col-md-4 col-sm-4 col-xs-4">
+                        3. Payment
+                    </li>
+
+                </ul>
+            </div>
+        <!----------left column ------------->
+            <div class="col-md-9 col-sm-9 col-xs-9 outer-left">
+                <div class="header">
+                    <h4 class="title">Items in your cart</h4>
+                </div>
+                <div class="inner">
+                <table class="table">
+                     <tr class="row">
+                                <td class="col-md-3">Items</td>
+                                <td class="col-md-3"></td>
+                                <td class="col-md-2">Price</td>
+                                <td class="col-md-2">Quantity</td>
+                                <td class="col-md-2">Total</td>
+                            </tr>
+                </table>
+                    <table class="table table-hover item-table">
+                        {% for detail in orders %}
+                            <tr id="row_{{ detail.product.pk }}" class="row featurette cart_table">
+                                <td class="col-md-3 product_image"><img class="cartImg thumbnail" src="{{ storage_host }}{% static 'products' %}/{{ detail.product.product_code }}/b_alternate_1.jpg"></td>
+                                <td class="col-md-3">
+                                    <div class="row featurette">
+                                        <p class="product_name"><a href="{% url 'design:product-view' detail.product.pk %}">{{ detail.product.product_name }}</a></p>
+                                        <p class="product_name">Size:S / Color : Red</p>
+                                        <button class="btn btn-default" onclick='remove_row("{{ detail.product.pk }}")'>remove</button>
+                                    </div>
+                                </td>
+                                <td class="col-md-2">
+                                    <p class="price product_price">${{ detail.product.price }}</p>
+                                </td>
+                                <td class="col-md-2 product-quantity">
+                                    <button class="plus">+</button>
+                                    <input class="product-count" name="{{ detail.pk }}" id="prod_count_{{ detail.product.pk }}" value="{{ detail.number_in_cart }}">
+                                    <button class="minus">-</button>
+                                </td>
+                                <td class="col-md-2">
+                                    <p class="price item_total_price"></p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <table class="summary-table">
+                        <tr class="row">
+                            <td class="col-md-6 col-sm-6"></td>
+                        <td class="col-md-2 col-sm-2">
+                            <p style="text-align:right; padding-right: 5px;">Coupon code:</p>
+                        </td>
+                        <td class="col-md-2 col-sm-2">
+                            <input style="width: 80%" type="text">
+                        </td>
+                        <td class="col-md-2 col-sm-2">
+                            <button>Apply</button>
+                        </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-md-6 col-sm-6"></td>
+                            <td class="col-md-2 col-sm-2">
+                            </td>
+                            <td class="col-md-2 col-sm-2">
+                                <p><b>Subtotal:</b></p>
+                            </td>
+                            <td class="col-md-2 col-sm-2">
+                                <p id="subtotal"></p>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-md-6 col-sm-6"></td>
+                            <td class="col-md-2 col-sm-2">
+                            </td>
+                            <td class="col-md-2 col-sm-2">
+                            </td>
+                            <td class="col-md-2 col-sm-2">
+                                <a href="#address" data-toggle="tab" class="btn btn-block btn-info btn-next cart_next" id="cart_checkout">Check out</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-3 outer-right" style="margin-top: 10px;">
+                <div class="inner">
+                    <h4>Subtotal:</h4>
+                    <a href="#address" data-toggle="tab" class="btn btn-block btn-info cart_next" id="cart_right_checkout">Check out</a>
+                </div>
+                <div class="header">
+                    <h4 class="title">People also bought</h4>
+                </div>
+                <div class="inner" id="recommend-buy">
+                    <div class="row">
+                    <div class="col-sm-6">
+                        <img src="http://placehold.it/100x100" />
+                    </div>
+                    <div class="col-sm-6">
+                        <h5>Product Name</h5>
+                        <h5>$65</h5>
+                        <button class="btn">Add to cart</button>
+                    </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-sm-6">
+                        <img src="http://placehold.it/100x100" />
+                    </div>
+                    <div class="col-sm-6">
+                        <h5>Product Name</h5>
+                        <h5>$65</h5>
+                        <button class="btn">Add to cart</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!---------address info tab---------------------->
+        <div class="tab-pane fade row" id="address">
+             <div class="row top-bar">
+                <ul class="myTab">
+                    <li class="col-md-4 col-sm-4 col-xs-4">
+                        1. Shopping Cart
+                    </li>
+
+                    <li class="active col-md-4 col-sm-4 col-xs-4">
+                        2. Address
+                    </li>
+
+                    <li class="col-md-4 col-sm-4 col-xs-4">
+                        3. Payment
+                    </li>
+
+                </ul>
+            </div>
+             <div class="col-md-9 col-sm-9 col-xs-9 outer-left">
+                <div class="header">
+                    <h4 class="title">Shipping Information</h4>
+                </div>
+                <div class="inner">
+                    <form class="form-signin" id="ship_form" action="" method="">
+                        {% csrf_token %}
+                        <label for="s_first_name">Receiver First Name:</label><input type="text" id="s_first_name" class="form-control" value="{{ profile.first_name }}">
+                        <label for="s_last_name">Receiver Last Name:</label><input type="text" id="s_last_name" class="form-control" value="{{ profile.last_name }}">
+                        <label for="s_address1">Address 1:</label><input type="text" id="s_address1" name="address1" class="form-control" value="{{ profile.address1 }}">
+                        <label for="s_address2">Address 2:</label><input type="text" id="s_address2" name="address2" class="form-control" value="{{ profile.address2 }}">
+                        <label for="s_city">City:</label><input type="text" id="s_city" name="city" class="form-control" value="{{ profile.city }}">
+                        <label for="s_state">State:</label><input id="s_state" type="text" name="state" class="form-control" value="{{ profile.state }}">
+                        <label for="s_zip">Zip:</label><input type="text" id="s_zip" name="zip" class="form-control" value="{{ profile.zip }}">
+                        <label for="s_phone1">mobile phone:</label><input type="text" id="s_phone1" name="phone1" class="form-control" value="{{ profile.phone1 }}">
+                        <label for="s_phone2">home phone:</label><input type="text" id="s_phone2" name="phone2" class="form-control" value="{{ profile.phone2 }}">
+                        <br>
+                        <input type="checkbox" id="is_billing_address"/><label class="vCheckboxLabel" for="is_billing_address"> &nbsp; Check if same as billing address</label>
+                    </form>
+                </div>
+                 <div class="header">
+                     <h4 class="title">Billing Information</h4>
+                </div>
+                <div class="inner">
+                    <form class="form-signin" id="bill_form" action="" method="">
+                        {% csrf_token %}
+                        <label for="b_first_name">Billing First Name:</label><input type="text" id="b_first_name" class="form-control">
+                        <label for="b_last_name">Billing Last Name:</label><input type="text" id="b_last_name" class="form-control">
+                        <label for="b_address1">Address 1:</label><input type="text" id="b_address1" name="address1" class="form-control">
+                        <label for="b_address2">Address 2:</label><input type="text" id="b_address2" name="address2" class="form-control">
+                        <label for="b_city">City:</label><input type="text" id="b_city" name="city" class="form-control">
+                        <label for="b_state">State:</label><input id="b_state" type="text" name="state" class="form-control">
+                        <label for="b_zip">Zip:</label><input type="text" id="b_zip" name="zip" class="form-control">
+                        <label for="b_phone1">mobile phone:</label><input type="text" id="b_phone1" name="phone1" class="form-control">
+                        <label for="b_phone2">home phone:</label><input type="text" id="b_phone2" name="phone2" class="form-control">
+                        <p></p>
+                    </form>
+                </div>
+                <div class="inner" style="overflow: hidden">
+                    <div class="col-sm-5"></div>
+                    <div class="col-sm-3">
+                        <a href="#summary" data-toggle="tab" class="btn btn-block btn-next btn-info" id="address_back_tab">Previous</a>
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-3">
+                        <a href="#payment" data-toggle="tab" class="btn btn-block btn-next btn-info" id="address_submit">Next</a>
+                    </div>
+                </div>
+             </div>
+            <div class="col-md-3 col-sm-3 col-xs-3 outer-right" style="margin-top: 10px;">
+                <div class="inner">
+                    <table class="table">
+                        <tr>
+                            <td>Cart</td>
+                            <td>$<span class="side_bar_item_total">0.00</span></td>
+                        </tr>
+                        <tr>
+                            <td>Discount</td>
+                            <td>$<span class="side_bar_discount_total">0.00</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    <!---------payment tab---------------------->
+        <div class="tab-pane fade row" id="payment">
+            <div class="row top-bar">
+                <ul class="myTab">
+                    <li class="col-md-4 col-sm-4 col-xs-4">
+                        1. Shopping Cart
+                    </li>
+
+                    <li class="col-md-4 col-sm-4 col-xs-4">
+                        2. Address
+                    </li>
+
+                    <li class="active col-md-4 col-sm-4 col-xs-4">
+                        3. Payment
+                    </li>
+
+                </ul>
+            </div>
+             <div class="col-md-9 col-sm-9 col-xs-9 outer-left">
+                <div class="header">
+                    <h4 class="title">Payment</h4>
+                </div>
+                <div class="inner" style="overflow: hidden;">
+
+                    <form action="/direct-checkout/" method="POST" id="payment-form">
+                        {% csrf_token %}
+                        <span class="payment-errors"></span>
+
+                        <div class="form-row">
+                            <label>
+                                <span>Card Holder Full Name</span>
+                                <input type="text" class="form-control" required="" name="card_holder" data-stripe="name">
+                            </label>
+                        </div>
+
+                        <div class="form-row">
+                            <label>
+                                <span>Card Number</span>
+                                <input type="text" class="form-control" size="20" data-stripe="number"/>
+                            </label>
+                        </div>
+
+                        <div class="form-row">
+                            <label>
+                                <span>CVC</span>
+                                <input type="text" class="form-control" size="4" data-stripe="cvc"/>
+                            </label>
+                        </div>
+
+                        <div class="form-row">
+                            <label>
+                                <span>Expiration Date</span>
+                            </label>
+                            <br>
+                            <div class="col-xs-1" style="padding-right: 5px">
+                                <input type="text" class="col-sm-2 form-control" size="2" data-stripe="exp-month" placeholder="MM"/>
+                            </div>
+                            <div class="col-xs-1" style="padding-right: 5px">
+                                <input type="text" class="col-sm-2 form-control" size="4" data-stripe="exp-year" placeholder="YYYY"/>
+                            </div>
+                        </div>
+                        <br>
+
+                        <input hidden name="order_id" value="{{ order_id }}">
+
+                        <div class="inner" style="overflow: hidden">
+                            <div class="col-sm-5"></div>
+                            <div class="col-sm-3">
+                                <a href="#address" data-toggle="tab" class="btn btn-block btn-info">Previous</a>
+                            </div>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-block btn-info">Place order</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+             </div>
+            <div class="col-md-3 col-sm-3 col-xs-3 outer-right" style="margin-top: 10px;" id="payment_side_bar">
+                <div class="inner">
+                    <table class="table">
+                        <tr>
+                            <td>Cart</td>
+                            <td>$<span class="side_bar_item_total">0.00</span></td>
+                        </tr>
+                        <tr>
+                            <td>Discount</td>
+                            <td>$<span class="side_bar_discount_total">0.00</span></td>
+                        </tr>
+                        <tr>
+                            <td>Tax</td>
+                            <td>$<span class="side_bar_tax_total">0.00</span></td>
+                        </tr>
+                        <tr>
+                            <td>Shipping</td>
+                            <td>$<span class="side_bar_shipping_total">0.00</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>Subtotal</b></td>
+                            <td>$<span class="side_bar_subtotal">0.00</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static "js/util.js" %}"></script>
+    <script type="text/javascript">
+        (function() {
+            function calcSubtotal(){
+                var subtotal = 0;
+                $('.item-table').find('.row').each(function(i){
+                    subtotal += $(this).find('.item_total_price').text().substr(1) * 1;
+                    $('#subtotal').text('$' + subtotal);
+                });
+            }
+
+            $('.item-table').find('.row').each(function(i){
+                    changeQuantity($(this), calcSubtotal);
+            })
+        })();
+    </script>
+    <script type="text/javascript">
+        var host = window.location.origin;
+
+        var b_address1 = $("#b_address1"),
+            b_address2 = $("#b_address2"),
+            b_city = $("#b_city"),
+            b_state = $("#b_state"),
+            b_zip = $("#b_zip"),
+            b_phone1 = $('#b_phone1'),
+            b_phone2 = $('#b_phone2'),
+            b_first_name = $('#b_first_name'),
+            b_last_name = $('#b_last_name');
+
+        var s_address1 = $("#s_address1"),
+            s_address2 = $("#s_address2"),
+            s_city = $("#s_city"),
+            s_state = $("#s_state"),
+            s_zip = $("#s_zip"),
+            s_phone1 = $('#s_phone1'),
+            s_phone2 = $('#s_phone2'),
+            s_first_name = $('#s_first_name'),
+            s_last_name = $('#s_last_name');
+
+        $('#is_billing_address').change(function(){
+            if (this.checked) {
+
+                if (s_address1 == "" || s_city == "" || s_state == "" || s_zip == "" || s_first_name == "" || s_last_name == "" || s_phone1 == "") {
+                    alert("shipping address info required !");
+                    this.checked = false;
+                }
+                else {
+                    b_address1.val(s_address1.val()).prop('disabled', true);
+                    b_address2.val(s_address2.val()).prop('disabled', true);
+                    b_city.val(s_city.val()).prop('disabled', true);
+                    b_state.val(s_state.val()).prop('disabled', true);
+                    b_zip.val(s_zip.val()).prop('disabled', true);
+                    b_phone1.val(s_phone1.val()).prop('disabled', true);
+                    b_phone2.val(s_phone2.val()).prop('disabled', true);
+                    b_first_name.val(s_first_name.val()).prop('disabled', true);
+                    b_last_name.val(s_last_name.val()).prop('disabled', true);
+                }
+            }
+            else{
+                b_address1.val("").prop('disabled', false);
+                b_address2.val("").prop('disabled', false);
+                b_city.val("").prop('disabled', false);
+                b_state.val("").prop('disabled', false);
+                b_zip.val("").prop('disabled', false);
+                b_phone1.val("").prop('disabled', false);
+                b_phone2.val("").prop('disabled', false);
+                b_first_name.val("").prop('disabled', false);
+                b_last_name.val("").prop('disabled', false);
+            }
+        });
+
+        $('#address_submit').on('click', function(){
+            var api_url = host + "/api/address/" + {{ user.pk }} + "/" + {{ order_id }} + "/";
+            $.ajax({
+            type: "POST",
+            url: api_url,
+            data : { csrfmiddlewaretoken: '{{ csrf_token }}',
+                     shipping_address1: s_address1.val(),
+                     shipping_address2: s_address2.val(),
+                     shipping_city: s_city.val(),
+                     shipping_state: s_state.val(),
+                     shipping_zip: s_zip.val(),
+                     shipping_phone1: s_phone1.val(),
+                     shipping_phone2: s_phone2.val(),
+                     billing_address1: b_address1.val(),
+                     billing_address2: b_address2.val(),
+                     billing_city: b_city.val(),
+                     billing_state: b_state.val(),
+                     billing_zip: b_zip.val(),
+                     billing_phone1: b_phone1.val(),
+                     billing_phone2: b_phone2.val(),
+                     shipping_first_name: s_first_name.val(),
+                     shipping_last_name: s_last_name.val(),
+                     billing_first_name: b_first_name.val(),
+                     billing_last_name: b_last_name.val() },
+            dataType: "json"
+            }).success(function(data, textStatus, jqXHR){
+                //alert(data["result"]);
+                update_cart_to_order_details();
+            }).fail(function(jqXHR, textStatus){
+                alert("Failed !");
+            });
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        var host = window.location.origin;
+
+        var side_bar_items_total = $('.side_bar_item_total'),
+            side_bar_discount = $('.side_bar_discount_total'),
+            side_bar_tax = $('.side_bar_tax_total'),
+            side_bar_shipping_fee = $('.side_bar_shipping_total'),
+            side_bar_subtotal = $('.side_bar_subtotal');
+
+        function remove_row(id){
+            var row_id = "#row_" + id;
+            remove_from_db(id);
+            $(row_id).hide();
+        }
+
+        function remove_from_db(id){
+            $.ajax({
+            type: "POST",
+            url: host + "/api/cart/" + id + "/remove/",
+            dataType: "json"
+            }).success(function(data, textStatus, jqXHR){
+                request_success();
+            }).fail(function(jqXHR, textStatus){
+                request_failed();
+            });
+        }
+
+        function request_success(){
+            $("#alert_msg").attr("class", "alert alert-success").html("action success !").fadeIn(1000, 0).fadeOut(2000, 0);
+        }
+
+        function request_failed(){
+            $("#alert_msg").attr("class", "alert alert-warning").html("action failed, please login !").fadeIn(1000, 0).fadeOut(2000, 0);
+        }
+
+        // api call -- for updating products in cart and order details
+        $(".cart_next").on('click', update_cart_to_order_details);
+
+        function update_cart_to_order_details(){
+
+            var o_id = {{ order_id }};
+            $( ".cart_table td input" ).each(function( index ) {
+                var detail_id = parseInt($(this).attr('name')),
+                    num_items = parseInt($(this).val());
+
+                if(parseInt($(this).val()) < 1){
+                    num_items = 1;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: host + "/api/cart-detail/" + detail_id + "/" + num_items + "/update/" + o_id + "/",
+                    dataType: "json"
+                    }).success(function(data, textStatus, jqXHR){
+
+                        fill_amount(data);
+
+                    }).fail(function(jqXHR, textStatus){
+                        alert('update_cart_to_order_details -- Request Failed');
+                    });
+            });
+        }
+
+        function fill_amount(data){
+            var items_subtotal = data['items_subtotal'],
+                discount = data['discount'],
+                tax = data['tax'],
+                shipping_fee = data['shipping_fee'],
+                subtotal = data['subtotal'];
+
+            side_bar_items_total.html(items_subtotal).val(items_subtotal);
+            side_bar_discount.html(discount).val(discount);
+            side_bar_tax.html(tax).val(tax);
+            side_bar_shipping_fee.html(shipping_fee).val(shipping_fee);
+            side_bar_subtotal.html(subtotal).val(subtotal);
+        }
+    </script>
+
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+    <script type="text/javascript">
+        // This identifies your website in the createToken call below
+        Stripe.setPublishableKey('pk_test_sph8r1BXDKVSvrwmyCGQouNo');
+
+        var stripeResponseHandler = function(status, response) {
+            var $form = $('#payment-form');
+
+            if (response.error) {
+                // Show the errors on the form
+                $form.find('.payment-errors').text(response.error.message);
+                $form.find('button').prop('disabled', false);
+            } else {
+                // token contains id, last4, and card type
+                var token = response.id;
+                // Insert the token into the form so it gets submitted to the server
+                $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+                // and re-submit
+                $form.get(0).submit();
+            }
+        };
+
+        jQuery(function($) {
+            $('#payment-form').submit(function(e) {
+                var $form = $(this);
+                // Disable the submit button to prevent repeated clicks
+                $form.find('button').prop('disabled', true);
+                Stripe.card.createToken($form, stripeResponseHandler);
+                // Prevent the form from submitting with the default action
+                return false;
+            });
+        });
+    </script>
+
+{% endblock %}

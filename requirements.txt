@@ -24,3 +24,4 @@ pytz==2015.2
 pylibmc==1.4.1
 django-bmemcached==0.2.2
 django-pylibmc==0.6.0
+stripe==1.22.3

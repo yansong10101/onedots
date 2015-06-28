@@ -35,16 +35,16 @@
   <body>
 
     <!-- Google Tag Manager -->
-    <noscript>
-        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-TT9C32" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <script>
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-TT9C32');
-    </script>
+{#    <noscript>#}
+{#        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-TT9C32" height="0" width="0" style="display:none;visibility:hidden"></iframe>#}
+{#    </noscript>#}
+{#    <script>#}
+{#        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':#}
+{#        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],#}
+{#        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=#}
+{#        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);#}
+{#        })(window,document,'script','dataLayer','GTM-TT9C32');#}
+{#    </script>#}
     <!-- End Google Tag Manager -->
 
     <nav class="navbar  navbar-static-top navbar-inverse">
@@ -150,12 +150,14 @@
             <ul class="nav navbar-nav navbar-right">
 
                 <li class="dropdown" id="myCart">
-                    <a class="dropdown-toggle" href="{% url 'design:my-cart' %}" data-toggle="dropdown">My Cart</a>
+{#                    <a class="dropdown-toggle" href="{% url 'design:my-cart' %}" data-toggle="dropdown">My Cart</a>#}
+                    <a class="dropdown-toggle" href="{% url 'design:cart-and-purchase' %}" data-toggle="dropdown">My Cart</a>
                     <div class="dropdown-content dropdown-menu">
 
                         <div id="cart_drop_down"></div>
 
-                        <a class="btn btn-default btn-block" id="nav_checkout" href="{% url 'design:my-cart' %}">Check out</a>
+{#                        <a class="btn btn-default btn-block" id="nav_checkout" href="{% url 'design:my-cart' %}">Check out</a>#}
+                        <a class="btn btn-default btn-block" id="nav_checkout" href="{% url 'design:cart-and-purchase' %}">Check out</a>
                     </div>
                 </li>
                 <li class="dropdown">

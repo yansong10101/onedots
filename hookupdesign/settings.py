@@ -152,6 +152,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('SUPPORT_EMAIL_PASSWORD', None)
 EMAIL_USE_TLS = True
 
 CRONJOBS = [
+    # ('*/1 * * * *','designweb.management.commands.group_mail_schedule.testing_call', '> /tmp/last_scheduled_job.log'),
     ('*/1 * * * *', 'designweb.management.commands.group_mail_schedule.testing_call', '> /tmp/last_scheduled_job.log'),
 ]
 
@@ -161,6 +162,13 @@ PAYMENT_SANDBOX = {
     'client_id': os.environ.get('PAYPAL_SANDBOX_CLIENT_ID', None),
     'client_secret': os.environ.get('PAYPAL_SANDBOX_CLIENT_SECRET', None),
 }
+
+# Stripe api keys
+STRIPE_TEST_SECRET_KEY = os.environ.get('STRIPE_TEST_SECRET_KEY', None)
+STRIPE_TEST_PUBLIC_KEY = os.environ.get('STRIPE_TEST_PUBLIC_KEY', None)
+
+STRIPE_LIVE_SECRET_KEY = os.environ.get('STRIPE_LIVE_SECRET_KEY', None)
+STRIPE_LIVE_PUBLIC_KEY = os.environ.get('STRIPE_LIVE_PUBLIC_KEY', None)
 
 # MemCache setup
 os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS',

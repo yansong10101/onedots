@@ -113,7 +113,7 @@ class CustomerReview(models.Model):
 
 class ProductComment(models.Model):
     product = models.ForeignKey(Product, related_name='product_forum')
-    reviewer = models.CharField(max_length=50, default='stranger')
+    reviewer = models.CharField(max_length=50, default='guest')
     reviewer_id = models.IntegerField(default=0)
     message = models.TextField(blank=True, max_length=1000)
     create_date = models.DateTimeField(auto_now_add=True, editable=False)
@@ -154,6 +154,7 @@ class Order(models.Model):
     total_shipping = models.DecimalField(decimal_places=2, default=0.00, max_digits=7)
     total_discount = models.DecimalField(decimal_places=2, default=0.00, max_digits=7)
     subtotal = models.DecimalField(decimal_places=2, default=0.00, max_digits=7)
+    is_alert = models.BooleanField(default=False)
 
     receiver_first_name = models.CharField(max_length=25, default='')
     receiver_last_name = models.CharField(max_length=25, default='')
@@ -226,6 +227,20 @@ class Order(models.Model):
             if order_detail.product.pk == prod_id:
                 order_detail.number_items = num_items
                 order_detail.save()
+
+    @staticmethod
+    def get_unconfirmed_orders():
+        """
+        Get all orders which are paid but not generated alert to staff
+        :return:    orders objects list
+        """
+        order_list = Order.objects.filter(is_paid=True, is_alert=False)[:10]
+        return order_list
+
+    @staticmethod
+    def get_user_latest_paid_order(user):
+        order = Order.objects.filter(is_paid=True, user=user).order_by('-pk').first()
+        return order
 
 
 class OrderDetails(models.Model):
