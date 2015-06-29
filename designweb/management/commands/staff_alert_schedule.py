@@ -1,6 +1,7 @@
 __author__ = 'zys'
 from django.core.management.base import BaseCommand, CommandError
 from designweb.emailer.email_utils import *
+from designweb.utils import sending_order_confirmation_email
 from designweb.models import Order
 
 
@@ -20,6 +21,7 @@ class Command(BaseCommand):
                 raise CommandError('the email "%s" does not exist' % email_address)
 
         for order in order_list:
+            sending_order_confirmation_email(order.user, order)
             template_dict = {
                 'username': order.user.username,
                 'user_id': order.user.pk,

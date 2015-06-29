@@ -71,7 +71,7 @@ def signup(request):
             signup_email.send_email({CONSTANT_DICT_FIELD_SUBJECT: 'Welcome to 1dots',
                                      CONSTANT_DICT_FIELD_TO_LIST: [username, ],
                                      CONSTANT_DICT_FIELD_TEMPLATE_TYPE: MAIL_TYPE_WELCOME,
-                                     CONSTANT_DICT_FIELD_TEMPLATE_CONTENT: None, })
+                                     CONSTANT_DICT_FIELD_TEMPLATE_CONTENT: {'username': user.username, }, })
             signup_email.close_connection()
             login(request, user)
             return render(request, 'home.html', get_display_dict(title='HOME',
@@ -644,6 +644,9 @@ def checkout_stripe(request):
     except stripe.error.CardError as e:
         print(e)
         return redirect(reverse('design:payment-failed'), get_display_dict(title='Payment Failed'))
+    # run schedule to generate email
+    # TODO : add new column to Order table, set flag to ensure generated email summery to customer
+    # sending_order_confirmation_email(request.user, order)
     return redirect(reverse('design:payment-success'), get_display_dict(title='Payment Success'))
 
 # ===============================================

@@ -11,6 +11,7 @@ import math
 from random import shuffle, choice
 from hookupdesign.settings import AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, BUCKET_PATH, \
     TAX_FILE_PATH
+from designweb.emailer.email_utils import *
 
 MAIN_IMAGE = 'main_image'
 SMALL_IMAGE = 's_alternate_*'
@@ -224,6 +225,32 @@ def sending_mail_to_single(mail_to, mail_subject, mail_content):
 
 def sending_mail_for_new_signup(mail_to):
     sending_mail_to_single(mail_to, 'welcome to use 1 dots', 'this is content for welcome!')
+
+
+def sending_order_confirmation_email(user, order):
+    template_dict = {
+        'username': user.username,
+        'order_id': order.pk,
+        'order_number_items': order.total_items,
+        'order_date': order.modified_date,
+        'order_total_amount': order.total_amount,
+        'order_shipping_cost': order.total_shipping,
+        'order_discount': order.total_discount,
+        'order_tax': order.total_tax,
+        'order_subtotal': order.subtotal,
+        'shipping_name': order.receiver_first_name + ' ' + order.receiver_last_name,
+        'shipping_address_1': order.shipping_address1,
+        'shipping_address_2': order.shipping_address2,
+        'shipping_city': order.shipping_city,
+        'shipping_state': order.shipping_state,
+        'shipping_zip': order.shipping_zip,
+    }
+    order_summery_email = Email()
+    order_summery_email.send_email({CONSTANT_DICT_FIELD_SUBJECT: '1dots [SUCCESS] : Order Summery ',
+                                    CONSTANT_DICT_FIELD_TO_LIST: [user.username, ],
+                                    CONSTANT_DICT_FIELD_TEMPLATE_TYPE: MAIL_TYPE_SUMMERY,
+                                    CONSTANT_DICT_FIELD_TEMPLATE_CONTENT: template_dict, })
+    order_summery_email.close_connection()
 
 
 # AWS S3 image buckets
