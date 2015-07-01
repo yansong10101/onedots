@@ -518,7 +518,8 @@
 
     <script type="text/javascript">
         // This identifies your website in the createToken call below
-        Stripe.setPublishableKey('pk_test_sph8r1BXDKVSvrwmyCGQouNo');
+        // TODO : switch publishable key to change test to live
+        Stripe.setPublishableKey('pk_live_YvC4jfZg4cH9ffiZtfHAVfpX');
 
         var stripeResponseHandler = function(status, response) {
             var $form = $('#payment-form');
