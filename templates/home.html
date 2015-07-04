@@ -16,9 +16,13 @@
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                 <li data-target="#myCarousel" data-slide-to="1"></li>
                 <li data-target="#myCarousel" data-slide-to="2"></li>
+                <li data-target="#myCarousel" data-slide-to="3"></li>
             </ol>
             <div class="carousel-inner">
-                <a class="item active" id="slide_3">
+                <a class="item active" id="slide_4">
+                    <img src="{{ storage_host }}/static/slides/rec_4.jpg" alt="Second slide">
+                </a>
+                <a class="item" id="slide_3">
                     <img src="{{ storage_host }}/static/slides/rec_3.jpg" alt="Free Shipping">
                 </a>
                 <a class="item" id="slide_1">
@@ -219,6 +223,7 @@
         function hard_code_slide_links(){
             $('#slide_1').attr('href', host + "/product/" + 42);
             $('#slide_2').attr('href', host + "/product/" + 37);
+            $('#slide_4').attr('href', host + "/category/" + 23);
         }
     </script>
 
