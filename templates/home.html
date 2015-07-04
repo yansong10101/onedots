@@ -95,7 +95,8 @@
 
     <script type="text/javascript">
         var host = window.location.origin;
-        var product_lite = $('<div class="product-thumbnail col-lg-4 col-md-4 col-sm-6"><div class="inner"><a><img class="img-thumbnail" alt="Generic placeholder image" style="width: 320px; height: 350px;" /></a><h5>Title</h5><h5 style="color:black;">Price</h5></div></div>');
+        var product_lite = $('<div class="product-thumbnail col-lg-4 col-md-4 col-sm-6"><div class="inner"><a><img class="img-thumbnail" alt="Generic placeholder image" style="width: 320px; height: 350px;" /></a><h5>Title</h5><h5 style="color:black;">Price</h5></div></div>'),
+            product_sales_lite = $('<div class="product-thumbnail col-lg-4 col-md-4 col-sm-6"><div class="inner"><a><img class="img-thumbnail" alt="Generic placeholder image" style="width: 320px; height: 350px;" /></a><h5>Title</h5><h5><strike style="color:#a6a6ac;">Price</strike> <span style="color:black;">Sales-Price</span></h5></div></div>');
         var image_dir = "{{ storage_host }}" + "{% static 'products/' %}";
         var container = $(".product-grid");
         var load_btn = $("#btn");
@@ -143,6 +144,12 @@
         function loadProduct(list){
             $.each(list, function(i, item){
                 var elem = product_lite.clone();
+                elem.find('h5').slice(1, 2).text("$ " + item.price);
+                if(item.sales_price > 0.00){
+                    elem = product_sales_lite.clone();
+                    elem.find('strike').text("$ " + item.price);
+                    elem.find('span').text("$ " + item.sales_price);
+                }
                 elem.children('div').children('a').eq(0).attr('href', host + "/product/" + item.pk);
                 elem.find('img').attr('src', image_dir + item.product_code + "/" + "b_alternate_1.jpg");
                 var prod_display_name = item.product_name;
@@ -150,7 +157,6 @@
                     prod_display_name = prod_display_name.substr(0, 40) + " ...";
                 }
                 elem.find('h5').slice(0, 1).text(prod_display_name);
-                elem.find('h5').slice(1, 2).text("$ " + item.price);
                 container.append(elem);
             });
         }

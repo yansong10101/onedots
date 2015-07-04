@@ -21,7 +21,8 @@ BIG_IMAGE = 'b_alternate_*'
 def get_display_dict(title, pass_dict={}):
     login_form = LoginForm()
     signup_form = SignupForm()
-    categories = Category.objects.all()
+    categories = Category.objects.filter(is_promotion=False)
+    promotion_category = Category.objects.filter(is_promotion=True).first()
     category_dict = {}
     for category in categories:
         temp_cat_dict = {
@@ -37,7 +38,8 @@ def get_display_dict(title, pass_dict={}):
                     'categories': category_dict,
                     'storage_host': S3_URL,
                     'login_form': login_form,
-                    'signup_form': signup_form, }
+                    'signup_form': signup_form,
+                    'promotion_category': promotion_category, }
     if pass_dict != {}:
         return dict(list(pass_dict.items()) + list(display_dict.items()))
     return display_dict

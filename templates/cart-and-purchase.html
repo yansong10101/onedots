@@ -56,7 +56,11 @@
                                     </div>
                                 </td>
                                 <td class="col-md-2">
+                                    {% if detail.product.sales_price > 0 %}
+                                    <p class="price product_price">${{ detail.product.sales_price }}</p>
+                                    {% else %}
                                     <p class="price product_price">${{ detail.product.price }}</p>
+                                    {% endif %}
                                 </td>
                                 <td class="col-md-2 product-quantity">
                                     <button class="plus">+</button>
@@ -520,6 +524,7 @@
         // This identifies your website in the createToken call below
         // TODO : switch publishable key to change test to live
         Stripe.setPublishableKey('pk_live_YvC4jfZg4cH9ffiZtfHAVfpX');
+        //Stripe.setPublishableKey('pk_test_sph8r1BXDKVSvrwmyCGQouNo');
 
         var stripeResponseHandler = function(status, response) {
             var $form = $('#payment-form');

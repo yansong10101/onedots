@@ -49,6 +49,7 @@ class Category(models.Model):
     description = models.TextField(blank=True)
     created_date = models.DateTimeField(auto_now_add=True, editable=False)
     modified_date = models.DateTimeField(auto_now=True, editable=False)
+    is_promotion = models.BooleanField(default=False)
 
     def __str__(self):
         return self.category_name
@@ -64,6 +65,8 @@ class Product(models.Model):
     product_name = models.CharField(max_length=100)
     product_code = models.CharField(max_length=20, unique=True, editable=False)
     price = models.DecimalField(decimal_places=2, blank=True, max_digits=7, null=True)  # if null show 'please call' msg
+    sales_price = models.DecimalField(decimal_places=2, default=0.00, max_digits=7)
+    percentage_off = models.DecimalField(decimal_places=2, default=0, max_digits=4)
     designer = models.ForeignKey(User, related_name='products', null=True)
     category = models.ManyToManyField(Category, blank=True, related_name='products')
     create_date = models.DateTimeField(auto_now_add=True, editable=False)
@@ -185,6 +188,8 @@ class Order(models.Model):
         for detail in order_detail_list:
             prod_name = detail.product.product_name
             prod_price = float(detail.product.price)
+            if detail.product.sales_price > 0:
+                prod_price = float(detail.product.sales_price)
             prod_weight = float(detail.product.details.weight)
             num_items = int(detail.number_items)
             items_subtotal += prod_price * num_items

@@ -54,5 +54,5 @@ def get_tax_combine_rate_by_zip_from_iron_cache(key_zip):
     item = tax_cache.get(str(key_zip), cache=IRON_CACHE_TAX_BUCKET)
     tax_dict = json.loads(item.value)
     if not tax_dict:
-        return 0.09
+        return 0.00
     return tax_dict[TAX_COLUMN_FIELD_COMBINE_RATE]
