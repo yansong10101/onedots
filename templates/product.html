@@ -125,7 +125,7 @@
             <div class="inner">
                 <h1 id="product_name"></h1>
 {#                <p id="product_code"></p>#}
-                <span id="regular_price" style="font-size: medium;"></span>&nbsp;<span id="sale_price"></span>&nbsp;<span id="is_in_stock">(in stock: {{ product.number_in_stock }})</span>
+                <span id="regular_price" style="font-size: medium;"></span>&nbsp;<span id="sales_price" style="color: red; font-size: medium;"></span>&nbsp;<span id="is_in_stock">(in stock: {{ product.number_in_stock }})</span>
                 <p style="font-size: small; font-style: oblique; color: #809191;">Estimated shipping date: 2-3 weeks</p>
                 <div class="hr" > </div>
                 <h4>Description</h4>
@@ -234,15 +234,22 @@
 
         function loadPage(data){
             loadProduct(data);
-
         }
 
         function loadProduct(results){
-            var img_url = image_dir + results.image_root;
+            var img_url = image_dir + results.image_root,
+                regular_price = $('#regular_price'),
+                sales_price = $('#sales_price');
             $('#mainImg').attr('src', img_url);
             $('#product_name').html(results.product_name);
 
-            $('#regular_price').html("$" + results.price);
+            var price_str = results.price;
+            if( results.sales_price > 0.00){
+                price_str = price_str.strike().fontcolor('#a6a6ac');
+                sales_price.html("$" + results.sales_price);
+            }
+            regular_price.html("$" + price_str);
+
             if(results.is_active == false){
                 $("#number_in_stock").hide();
                 $('#is_in_stock').html("(out of stock)").attr('style', "color:red; font-size:small");

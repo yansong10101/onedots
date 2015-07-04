@@ -21,6 +21,7 @@ class Command(BaseCommand):
                 raise CommandError('the email "%s" does not exist' % email_address)
 
         for order in order_list:
+            # sending confirmation email to customer
             sending_order_confirmation_email(order.user, order)
             template_dict = {
                 'username': order.user.username,
