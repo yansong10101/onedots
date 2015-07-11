@@ -51,7 +51,7 @@
                                 <td class="col-md-3">
                                     <div class="row featurette">
                                         <p class="product_name"><a href="{% url 'design:product-view' detail.product.pk %}">{{ detail.product.product_name }}</a></p>
-                                        <p class="product_name">Size:S / Color : Red</p>
+{#                                        <p class="product_name">Size:S / Color : Red</p>#}
                                         <button class="btn btn-default" onclick='remove_row("{{ detail.product.pk }}")'>remove</button>
                                     </div>
                                 </td>
@@ -115,31 +115,31 @@
                     <h4>Subtotal:</h4>
                     <a href="#address" data-toggle="tab" class="btn btn-block btn-info cart_next" id="cart_right_checkout">Check out</a>
                 </div>
-                <div class="header">
-                    <h4 class="title">People also bought</h4>
-                </div>
-                <div class="inner" id="recommend-buy">
-                    <div class="row">
-                    <div class="col-sm-6">
-                        <img src="http://placehold.it/100x100" />
-                    </div>
-                    <div class="col-sm-6">
-                        <h5>Product Name</h5>
-                        <h5>$65</h5>
-                        <button class="btn">Add to cart</button>
-                    </div>
-                    </div>
-                    <div class="row">
-                    <div class="col-sm-6">
-                        <img src="http://placehold.it/100x100" />
-                    </div>
-                    <div class="col-sm-6">
-                        <h5>Product Name</h5>
-                        <h5>$65</h5>
-                        <button class="btn">Add to cart</button>
-                    </div>
-                    </div>
-                </div>
+{#                <div class="header">#}
+{#                    <h4 class="title">People also bought</h4>#}
+{#                </div>#}
+{#                <div class="inner" id="recommend-buy">#}
+{#                    <div class="row">#}
+{#                    <div class="col-sm-6">#}
+{#                        <img src="http://placehold.it/100x100" />#}
+{#                    </div>#}
+{#                    <div class="col-sm-6">#}
+{#                        <h5>Product Name</h5>#}
+{#                        <h5>$65</h5>#}
+{#                        <button class="btn">Add to cart</button>#}
+{#                    </div>#}
+{#                    </div>#}
+{#                    <div class="row">#}
+{#                    <div class="col-sm-6">#}
+{#                        <img src="http://placehold.it/100x100" />#}
+{#                    </div>#}
+{#                    <div class="col-sm-6">#}
+{#                        <h5>Product Name</h5>#}
+{#                        <h5>$65</h5>#}
+{#                        <button class="btn">Add to cart</button>#}
+{#                    </div>#}
+{#                    </div>#}
+{#                </div>#}
             </div>
         </div>
 
